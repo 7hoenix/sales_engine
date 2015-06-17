@@ -77,4 +77,3 @@ end
 
 e = SalesEngine.new
 e.create_merchant_repository
-

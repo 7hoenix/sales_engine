@@ -59,40 +59,32 @@ class SalesEngineTest < Minitest::Test
     assert_equal "", sanitized
   end
 
-  def test_it_starts_up
-    skip
-    engine.startup
-  end
-
   def test_it_loads_merchant_data
-    skip
-    engine.merchant_repository
+    assert engine.create_merchant_repository
   end
 
   def test_it_loads_invoice_data
     skip
-    engine.invoice_repository
+    assert engine.create_invoice_repository
   end
 
   def test_it_loads_item_data
     skip
-    engine.item_repository
+    assert engine.create_item_repository
   end
 
   def test_it_loads_invoice_item_data
     skip
-    engine.invoice_item_repository
+    assert engine.create_invoice_item_repository
   end
 
   def test_it_loads_customer_data
     skip
-    engine.customer_repository
+    assert engine.create_customer_repository
   end
 
   def test_it_loads_transaction_data
-    skip
-    engine.transaction_repository
+    assert engine.create_transaction_repository
   end
-
 
 end
