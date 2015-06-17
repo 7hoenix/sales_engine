@@ -12,7 +12,7 @@ class MerchantRepository
 
   def load_up_data
     merchant_data.each do |row|
-      merchants << Merchant.new(row, "self")
+      merchants << Merchant.new(row, self)
     end
   end
 

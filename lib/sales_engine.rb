@@ -1,7 +1,9 @@
 require 'csv'
-require_relative 'merchant'
-require_relative 'merchant_repository'
 require_relative 'parser'
+require_relative 'merchant_repository'
+require_relative 'merchant'
+require_relative 'transaction_repository'
+require_relative 'transaction'
 require 'pry'
 # etc...
 
