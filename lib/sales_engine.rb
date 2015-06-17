@@ -2,6 +2,7 @@ require 'csv'
 require_relative 'merchant'
 require_relative 'merchant_repository'
 require_relative 'parser'
+require 'pry'
 # etc...
 
 class SalesEngine
@@ -18,7 +19,11 @@ class SalesEngine
 
   def parse_merchant_data
     parser = Parser.new
-    sanitized_merchant_data = parser.parse_merchant_data(@merchant_data)
+    parser.parse_merchant_data(@merchant_data)
+  end
+
+  def create_merchant_repository
+    MerchantRepository.new(parse_merchant_data, self)
   end
 
   def parse_customer_data
@@ -48,7 +53,5 @@ class SalesEngine
 
 end
 
-# e = SalesEngine.new
-# e.load_merchants
-# puts e.parse_merchant_data
-# puts e.parse_customer_data
+e = SalesEngine.new
+e.create_merchant_repository
