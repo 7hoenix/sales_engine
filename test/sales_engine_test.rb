@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require 'minitest/autorun'
 require 'minitest/pride'
 require_relative '../lib/sales_engine'
@@ -13,12 +16,25 @@ class SalesEngineTest < Minitest::Test
     assert engine
   end
 
+  def test_it_loads_data_from_the_csv
+    skip
+    assert_kind_of CSV, engine.parse_merchant_data
+  end
+
+  def test_the_parser_sanitizes_merchant_data
+    skip
+    sanitized = engine.parse_merchant_data
+
+    assert_equal "", sanitized
+  end
+
   def test_it_starts_up
     skip
     engine.startup
   end
 
   def test_it_loads_merchant_data
+    skip
     engine.merchant_repository
   end
 
@@ -46,5 +62,6 @@ class SalesEngineTest < Minitest::Test
     skip
     engine.transaction_repository
   end
+
 
 end
