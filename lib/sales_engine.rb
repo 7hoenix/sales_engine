@@ -31,9 +31,17 @@ class SalesEngine
     sanitized_customer_data = parser.parse_customer_data(@customer_data)
   end
 
+  def create_customer_repository
+    CustomerRepository.new(parse_customer_data, self)
+  end
+
   def parse_invoice_item_data
     parser = Parser.new
     sanitized_invoice_item_data = parser.parse_invoice_item_data(@invoice_item_data)
+  end
+
+  def create_invoice_item_repository
+    InvoiceItemRepository.new(parse_invoice_item_data, self)
   end
 
   def parse_invoice_data
@@ -41,14 +49,26 @@ class SalesEngine
     sanitized_invoice_data = parser.parse_invoice_data(@invoice_data)
   end
 
+  def create_invoice_repository
+    InvoiceRepository.new(parse_invoice_data, self)
+  end
+
   def parse_item_data
     parser = Parser.new
     sanitized_item_data = parser.parse_item_data(@item_data)
   end
 
+  def create_item_repository
+    ItemRepository.new(parse_item_data, self)
+  end
+
   def parse_transaction_data
     parser = Parser.new
     sanitized_transaction_data = parser.parse_transaction_data(@transaction_data)
+  end
+
+  def create_transaction_repository
+    TransactionRepository.new(parse_transaction_data, self)
   end
 
 end
