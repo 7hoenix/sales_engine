@@ -1,5 +1,4 @@
 require_relative '../lib/transaction'
-require 'pry'
 
 class TransactionRepository
   attr_reader :sales_engine, :transaction_data, :transactions
