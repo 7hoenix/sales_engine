@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require 'minitest/autorun'
 require 'minitest/pride'
 require_relative '../lib/merchant_repository'
@@ -7,19 +10,36 @@ class MerchantRepositoryTest < Minitest::Test
   attr_reader :merchant_repository
 
   def setup
-      @merchant_repository = MerchantRepository.new
+    @merchant_repository = MerchantRepository.new("../test/fixtures/merchants_test.csv", self)
 
-      merchant = Merchant.new(1, "Jack", "2012-03-27 14:53:58 UTC", "2012-03-27 14:53:58 UTC")
-      merchant2 = Merchant.new(2, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC")
-      merchant3 = Merchant.new(3, "Frank", "2012-03-27 14:53:60 UTC", "2012-03-27 14:53:60 UTC")
+    merchant = Merchant.new(1, "Jack", "2012-03-27 14:53:58 UTC", "2012-03-27 14:53:58 UTC")
+    merchant2 = Merchant.new(2, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC")
+    merchant3 = Merchant.new(3, "Frank", "2012-03-27 14:53:60 UTC", "2012-03-27 14:53:60 UTC")
 
-      merchant_repository << merchant
-      merchant_repository << merchant2
-      merchant_repository << merchant3
+    merchant_repository << merchant
+    merchant_repository << merchant2
+    merchant_repository << merchant3
   end
 
   def test_it_exist
+    skip
     assert merchant_repository
+  end
+
+  def test_it_loads_merchant_data
+    skip
+    merchant_data = merchant_repository.load_merchant_data
+
+    assert_equal "1, Schroeder-Jerde, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC " +
+                     "2, \"Klein, Rempel and Jones\", 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
+                     "3, Willms and Sons, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
+                     "4, Cummings-Thiel, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
+                     "5, Williamson Group, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
+                     "6, Williamson Group, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 16 : 12 : 25 UTC" +
+                     "7, Bernhard-Johns, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
+                     "8, \"Osinski, Pollich and Koelpin\", 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
+                     "9, Hand-Spencer, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
+                     "10, \"Bechtelar, Jones and Stokes\", 2012-03-27 14 : 54 : 00 UTC, 2012-03-27 14 : 54 : 00 UTC, merchants", merchant_data
   end
 
   def test_the_repository_count_goes_up_by_three_when_you_add_three_instances_of_a_merchant

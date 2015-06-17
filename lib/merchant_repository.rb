@@ -1,12 +1,17 @@
-class MerchantRepository
-  attr_reader :repository
+require_relative '../lib/sales_engine'
 
-  def initialize
+class MerchantRepository
+  attr_reader :repository, :engine, :merchant_data
+
+  def initialize(merchant_data, engine)
     @repository = []
+    @merchant_data = merchant_data
+    @engine = engine
   end
 
   def <<(merchant)
     repository << [merchant.id, merchant.name, merchant.created_at, merchant.updated_at]
+      # repository << Merchant.new(merchant, self)
   end
 
   def all
@@ -49,3 +54,5 @@ class MerchantRepository
     repository.select { |merchant| merchant[3] == updated_at }
   end
 end
+
+
