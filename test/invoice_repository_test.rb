@@ -4,191 +4,221 @@ require_relative '../lib/invoice_repository'
 require_relative '../lib/invoice'
 
 class InvoiceRepositoryTest < Minitest::Test
-  attr_reader :invoice_repository
+    def test_it_finds_the_first_example_of_invoice_by_customer_id
+      sales_engine = "MY ENGINE"
+      hashes = [
+          {id: 1, customer_id: 5},
+          {id: 2, customer_id: 6},
+          {id: 3, customer_id: 5},]
+      repo = InvoiceRepository.new(hashes, sales_engine)
 
-  def setup
-    @invoice_repository = InvoiceRepository.new
+      first_invoice = repo.find_invoice_by_customer_id(5)
 
-    invoice = Invoice.new(1,1,26,"shipped","2012-03-25 09:54:09 UTC","2012-03-25 09:54:09 UTC")
-    invoice2 = Invoice.new(2,1,75,"shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC")
-    invoice3 = Invoice.new(3,1,78,"shipped","2012-03-10 00:54:09 UTC","2012-03-10 00:54:09 UTC")
+      assert_equal [1], [first_invoice.id]
 
-    invoice_repository << invoice
-    invoice_repository << invoice2
-    invoice_repository << invoice3
-  end
+      second_invoice = repo.find_invoice_by_customer_id(6)
+      assert_equal [2], [second_invoice.id]
 
-  def test_it_exist
-    assert invoice_repository
-  end
+      # tv = repo.find_item_by_name("TV")
+      # assert_equal [], [tv.id]
 
-  def test_the_repository_count_goes_up_by_three_when_you_add_three_instances_of_a_merchant
-    assert_equal 3, invoice_repository.repository.count
-  end
+    end
 
-  def test_it_returns_all_instances_when_the_all_method_is_called
+    def test_it_finds_all_examples_of_invoice_by_customer_id
+      sales_engine = "MY ENGINE"
+      hashes = [
+          {id: 1, customer_id: 5},
+          {id: 2, customer_id: 6},
+          {id: 3, customer_id: 5},]
+      repo = InvoiceRepository.new(hashes, sales_engine)
 
-    all_invoices = invoice_repository.all
+      invoices = repo.find_all_invoices_by_customer_id(5)
 
-    expected = [[1, 1, 26, "shipped", "2012-03-25 09:54:09 UTC", "2012-03-25 09:54:09 UTC"], [2,1,75,"shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC"], [3,1,78,"shipped","2012-03-10 00:54:09 UTC","2012-03-10 00:54:09 UTC"]]
-    assert_equal expected, all_invoices
-  end
+      assert_equal [1,3], invoices.map { |invoice| invoice.id }
 
-  def test_it_returns_a_random_instance_when_the_random_method_is_called
-    skip
-    # figure out how to stub so we can actually test this
-    invoice = Invoice.new(1, 1, 26, "shipped", "2012-03-25 09:54:09 UTC", "2012-03-25 09:54:09 UTC")
-    invoice2 = Invoice.new(2,1,75,"shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC")
-    invoice_repository << invoice
-    invoice_repository << invoice2
+      second_invoice = repo.find_all_invoices_by_customer_id(6)
+      assert_equal [2], second_invoice.map { |invoice| invoice.id }
 
-    random_invoice = invoice_repository.random
+      # tv = repo.find_item_by_name("TV")
+      # assert_equal [], [tv.id]
 
-    expected = [1, 1, 26, "shipped", "2012-03-25 09:54:09 UTC", "2012-03-25 09:54:09 UTC"]
-    assert_equal expected, random_invoice
-  end
+    end
 
-  def test_it_finds_an_instance_of_invoice_by_searching_for_id
-    id = 2
+    def test_it_finds_the_first_example_of_invoice_by_merchant_id
+      sales_engine = "MY ENGINE"
+      hashes = [
+          {id: 1, merchant_id: 5},
+          {id: 2, merchant_id: 6},
+          {id: 3, merchant_id: 5},]
+      repo = InvoiceRepository.new(hashes, sales_engine)
 
-    invoice_by_id = invoice_repository.find_by_id(id)
+      first_invoice = repo.find_invoice_by_merchant_id(5)
 
-    expected = [2,1,75,"shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC"]
+      assert_equal [1], [first_invoice.id]
 
-    assert_equal expected, invoice_by_id
-  end
+      second_invoice = repo.find_invoice_by_merchant_id(6)
+      assert_equal [2], [second_invoice.id]
 
-  def test_it_finds_an_instance_of_invoice_by_searching_for_customer_id
-    customer_id = 1
+      # tv = repo.find_item_by_name("TV")
+      # assert_equal [], [tv.id]
 
-    invoice_by_customer_id = invoice_repository.find_by_customer_id(customer_id)
+    end
 
-    expected = [1, 1, 26, "shipped", "2012-03-25 09:54:09 UTC", "2012-03-25 09:54:09 UTC"]
+    def test_it_finds_all_examples_of_invoice_by_merchant_id
+      sales_engine = "MY ENGINE"
+      hashes = [
+          {id: 1, merchant_id: 5},
+          {id: 2, merchant_id: 6},
+          {id: 3, merchant_id: 5},]
+      repo = InvoiceRepository.new(hashes, sales_engine)
 
-    assert_equal expected, invoice_by_customer_id
-  end
+      fives = repo.find_all_invoices_by_merchant_id(5)
 
-  def test_it_finds_an_instance_of_invoice_by_searching_for_merchant_id
-    merchant_id = 75
+      assert_equal [1, 3], fives.map { |invoice| invoice.id }
 
-    invoice_by_merchant_id = invoice_repository.find_by_merchant_id(merchant_id)
+      second_invoice = repo.find_all_invoices_by_merchant_id(6)
+      assert_equal [2], second_invoice.map { |invoice| invoice.id }
 
-    expected = [2,1,75,"shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC"]
+      # tv = repo.find_item_by_name("TV")
+      # assert_equal [], [tv.id]
 
-    assert_equal expected, invoice_by_merchant_id
-  end
+    end
 
-  def test_it_finds_an_instance_of_invoice_by_searching_for_status
-    status = "shipped"
 
-    invoice_by_status = invoice_repository.find_by_status(status)
+    def test_it_finds_the_first_example_of_invoice_by_status
+      sales_engine = "MY ENGINE"
+      hashes = [
+          {id: 1, status: "shipped"},
+          {id: 2, status: "not shipped"},
+          {id: 3, status: "shipped"},]
+      repo = InvoiceRepository.new(hashes, sales_engine)
 
-    expected = [1, 1, 26, "shipped", "2012-03-25 09:54:09 UTC", "2012-03-25 09:54:09 UTC"]
+      first_invoice = repo.find_invoice_by_status("shipped")
 
-    assert_equal expected, invoice_by_status
-  end
+      assert_equal [1], [first_invoice.id]
 
-  def test_it_finds_an_instance_of_invoice_by_searching_for_created_at
-    created_at = "2012-03-12 05:54:09 UTC"
+      second_invoice = repo.find_invoice_by_status("not shipped")
+      assert_equal [2], [second_invoice.id]
 
-    invoice_by_created_at = invoice_repository.find_by_created_at(created_at)
+      # tv = repo.find_item_by_name("TV")
+      # assert_equal [], [tv.id]
 
-    expected = [2,1,75,"shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC"]
+    end
 
-    assert_equal expected, invoice_by_created_at
-  end
+    def test_it_finds_all_examples_of_invoice_by_status
+      sales_engine = "MY ENGINE"
+      hashes = [
+          {id: 1, status: "shipped"},
+          {id: 2, status: "not shipped"},
+          {id: 3, status: "shipped"},]
+      repo = InvoiceRepository.new(hashes, sales_engine)
 
-  def test_it_finds_an_instance_of_invoice_by_searching_for_updated_at
-    updated_at = "2012-03-12 05:54:09 UTC"
+      invoices = repo.find_all_invoices_by_status("shipped")
 
-    invoice_by_updated_at = invoice_repository.find_by_updated_at(updated_at)
+      assert_equal [1, 3], invoices.map { |invoice| invoice.id }
 
-    expected = [2,1,75,"shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC"]
+      second_invoice = repo.find_all_invoices_by_status("not shipped")
+      assert_equal [2], second_invoice.map { |invoice| invoice.id }
 
-    assert_equal expected, invoice_by_updated_at
-  end
+      # tv = repo.find_item_by_name("TV")
+      # assert_equal [], [tv.id]
 
-  def test_it_finds_all_instances_of_invoice_by_searching_for_id
-    invoice4 = Invoice.new(2,18,77,"not shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC")
-    invoice_repository << invoice4
+    end
 
-    id = 2
+    def test_it_finds_the_first_example_of_item_by_created_at
+      skip
+      sales_engine = "MY ENGINE"
+      hashes = [
+          {id: 1, created_at: (Time.now - 3)},
+          {id: 2, created_at: (Time.now - 5)},
+          {id: 3, created_at: (Time.now - 7)},]
+      repo = ItemRepository.new(hashes, sales_engine)
 
-    all_invoices_by_id = invoice_repository.find_all_by_id(id)
+      first_created_at = repo.find_item_by_created_at(Time.now - 5)
 
-    expected = [[2,1,75,"shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC"],[2,18,77,"not shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC"]]
+      assert_equal [2], [first_created_at.id]
 
-    assert_equal expected, all_invoices_by_id
-  end
+      second_created_at = repo.find_item_by_created_at(Time.now - 7)
+      assert_equal [3], [second_created_at.id]
 
-  def test_it_finds_all_instances_of_invoice_by_searching_for_customer_id
-    customer_id = 1
+      # tv = repo.find_item_by_name("TV")
+      # assert_equal [], [tv.id]
 
-    all_invoices_by_customer_id = invoice_repository.find_all_by_customer_id(customer_id)
+    end
 
-    expected = [[1,1,26,"shipped","2012-03-25 09:54:09 UTC","2012-03-25 09:54:09 UTC"],[2,1,75,"shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC"],[3,1,78,"shipped","2012-03-10 00:54:09 UTC","2012-03-10 00:54:09 UTC"]]
+    def test_it_finds_the_first_example_of_item_by_updated_at
+      skip
+      sales_engine = "MY ENGINE"
+      hashes = [
+          {id: 1, updated_at: Time.now - 3},
+          {id: 1, updated_at: Time.now - 5},
+          {id: 1, updated_at: Time.now - 7},]
+      repo = ItemRepository.new(hashes, sales_engine)
 
-    assert_equal expected, all_invoices_by_customer_id
-  end
+      first_updated_at = repo.find_item_by_name(Time.now - 3)
 
-  def test_it_finds_all_instances_of_invoice_by_searching_for_merchant_id
-    invoice4 = Invoice.new(2,1,26,"shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC")
-    invoice5 = Invoice.new(3,1,26,"shipped","2012-03-10 00:54:09 UTC","2012-03-10 00:54:09 UTC")
+      assert_equal [1], [first_updated_at.id]
 
-    invoice_repository << invoice4
-    invoice_repository << invoice5
+      second_updated_at = repo.find_item_by_name(Time.now - 5)
+      assert_equal [2], [second_updated_at.id]
 
-    merchant_id = 26
+      # tv = repo.find_item_by_name("TV")
+      # assert_equal [], [tv.id]
 
-    all_invoices_by_merchant_id = invoice_repository.find_all_by_merchant_id(merchant_id)
+    end
 
-    expected = [[1,1,26,"shipped","2012-03-25 09:54:09 UTC","2012-03-25 09:54:09 UTC"],[2,1,26,"shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC"],[3,1,26,"shipped","2012-03-10 00:54:09 UTC","2012-03-10 00:54:09 UTC"]]
+    def test_it_finds_all_examples_of_items_by_description
 
-    assert_equal expected, all_invoices_by_merchant_id
-  end
+      sales_engine = "MY ENGINE"
+      hashes = [
+          {id: 1, description: "Shiny"},
+          {id: 2, description: "Dull"},
+          {id: 3, description: "Shiny"},]
+      repo = ItemRepository.new(hashes, sales_engine)
 
-  def test_it_finds_all_instances_of_invoice_by_searching_for_status
-    invoice4 = Invoice.new(2,1,26,"not shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC")
-    invoice_repository << invoice4
+      shinys = repo.find_all_items_by_description("Shiny")
+      dulls = repo.find_all_items_by_description("Dull")
+      tvs = repo.find_all_items_by_description("Tv")
 
-    status = "not shipped"
+      assert_equal [1, 3], shinys.map { |shiny| shiny.id }
+      assert_equal [2], dulls.map { |dull| dull.id }
+      assert_equal [], tvs.map { |tv| tv.id }
+    end
 
-    all_invoices_by_status = invoice_repository.find_all_by_status(status)
+    def test_it_finds_all_examples_of_items_by_unit_price
 
-    expected = [[2,1,26,"not shipped","2012-03-12 05:54:09 UTC","2012-03-12 05:54:09 UTC"]]
+      sales_engine = "MY ENGINE"
+      hashes = [
+          {id: 1, unit_price: 20},
+          {id: 2, unit_price: 10},
+          {id: 3, unit_price: 20},]
+      repo = ItemRepository.new(hashes, sales_engine)
 
-    assert_equal expected, all_invoices_by_status
-  end
+      twenties = repo.find_all_items_by_unit_price(20)
+      tens = repo.find_all_items_by_unit_price(10)
+      tvs = repo.find_all_items_by_unit_price(45)
 
-  def test_it_finds_all_instances_of_invoice_by_searching_for_created_at
-    invoice4 = Invoice.new(2,1,26,"shipped","2012-03-14 05:54:09 UTC","2012-03-12 05:54:09 UTC")
-    invoice5 = Invoice.new(3,1,26,"shipped","2012-03-14 05:54:09 UTC","2012-03-10 00:54:09 UTC")
+      assert_equal [1, 3], twenties.map { |twenty| twenty.id }
+      assert_equal [2], tens.map { |ten| ten.id }
+      assert_equal [], tvs.map { |tv| tv.id }
+    end
 
-    invoice_repository << invoice4
-    invoice_repository << invoice5
+    def test_it_finds_all_examples_of_items_by_merchant_id
 
-    created_at = "2012-03-14 05:54:09 UTC"
+      sales_engine = "MY ENGINE"
+      hashes = [
+          {id: 1, merchant_id: 5},
+          {id: 2, merchant_id: 8},
+          {id: 3, merchant_id: 5},]
+      repo = ItemRepository.new(hashes, sales_engine)
 
-    all_invoices_by_created_at = invoice_repository.find_all_by_created_at(created_at)
+      fives = repo.find_all_items_by_merchant_id(5)
+      eights = repo.find_all_items_by_merchant_id(8)
+      tvs = repo.find_all_items_by_merchant_id(10)
 
-    expected = [[2,1,26,"shipped","2012-03-14 05:54:09 UTC","2012-03-12 05:54:09 UTC"],[3,1,26,"shipped","2012-03-14 05:54:09 UTC","2012-03-10 00:54:09 UTC"]]
+      assert_equal [1, 3], fives.map { |five| five.id }
+      assert_equal [2], eights.map { |eight| eight.id }
+      assert_equal [], tvs.map { |tv| tv.id }
+    end
 
-    assert_equal expected, all_invoices_by_created_at
-  end
-
-  def test_it_finds_all_instances_of_invoice_by_searching_for_updated_at
-    invoice4 = Invoice.new(2,1,26,"shipped","2012-03-14 05:54:09 UTC","2012-03-14 05:54:09 UTC")
-    invoice5 = Invoice.new(3,1,26,"shipped","2012-03-15 05:54:09 UTC","2012-03-14 05:54:09 UTC")
-
-    invoice_repository << invoice4
-    invoice_repository << invoice5
-
-    updated_at = "2012-03-14 05:54:09 UTC"
-
-    all_invoices_by_updated_at = invoice_repository.find_all_by_updated_at(updated_at)
-
-    expected = [[2,1,26,"shipped","2012-03-14 05:54:09 UTC","2012-03-14 05:54:09 UTC"],[3,1,26,"shipped","2012-03-15 05:54:09 UTC","2012-03-14 05:54:09 UTC"]]
-
-    assert_equal expected, all_invoices_by_updated_at
-  end
 end

@@ -1,67 +1,72 @@
 class InvoiceRepository
-  attr_reader :repository
+  attr_reader :sales_engine, :invoice_data, :invoices
 
-  def initialize
-    @repository = []
+  def initialize(invoice_data, sales_engine)
+    @invoice_data = invoice_data
+    @sales_engine = sales_engine
+    @invoices = []
+    load_up_data
   end
 
-  def <<(invoice)
-    repository << [invoice.id, invoice.customer_id, invoice.merchant_id, invoice.status, invoice.created_at, invoice.updated_at]
+  def load_up_data
+    invoice_data.each do |invoice|
+      invoices << Invoice.new(invoice, self)
+    end
   end
 
   def all
-    repository.collect { |invoice| invoice }
+    invoices.collect { |invoice| invoice }
   end
 
   def random
-    repository.shuffle.first
+    invoices.shuffle.first
   end
 
-  def find_by_id(id)
-    repository.find { |invoice| invoice[0] == id }
+  def find_invoice_by_id(id)
+    invoices.find { |invoice| invoice.id == id }
   end
 
-  def find_by_customer_id(customer_id)
-    repository.find { |invoice| invoice[1] == customer_id }
+  def find_invoice_by_customer_id(customer_id)
+    invoices.find { |invoice| invoice.customer_id == customer_id }
   end
 
-  def find_by_merchant_id(merchant_id)
-    repository.find { |invoice| invoice[2] == merchant_id }
+  def find_invoice_by_merchant_id(merchant_id)
+    invoices.find { |invoice| invoice.merchant_id == merchant_id }
   end
 
-  def find_by_status(status)
-    repository.find { |invoice| invoice[3] == status }
+  def find_invoice_by_status(status)
+    invoices.find { |invoice| invoice.status == status }
   end
 
-  def find_by_created_at(created_at)
-    repository.find { |invoice| invoice[4] == created_at }
+  def find_invoice_by_created_at(created_at)
+    invoices.find { |invoice| invoice.created_at == created_at }
   end
 
-  def find_by_updated_at(updated_at)
-    repository.find { |invoice| invoice[5] == updated_at }
+  def find_invoice_by_updated_at(updated_at)
+    invoices.find { |invoice| invoice.updated_at == updated_at }
   end
 
-  def find_all_by_id(id)
-    repository.select { |invoice| invoice[0] == id }
+  def find_all_invoices_by_id(id)
+    invoices.select { |invoice| invoice.id == id }
   end
 
-  def find_all_by_customer_id(customer_id)
-    repository.select { |invoice| invoice[1] == customer_id }
+  def find_all_invoices_by_customer_id(customer_id)
+    invoices.select { |invoice| invoice.customer_id == customer_id }
   end
 
-  def find_all_by_merchant_id(merchant_id)
-    repository.select { |invoice| invoice[2] == merchant_id }
+  def find_all_invoices_by_merchant_id(merchant_id)
+    invoices.select { |invoice| invoice.merchant_id == merchant_id }
   end
 
-  def find_all_by_status(status)
-    repository.select { |invoice| invoice[3] == status }
+  def find_all_invoices_by_status(status)
+    invoices.select { |invoice| invoice.status == status }
   end
 
-  def find_all_by_created_at(created_at)
-    repository.select { |invoice| invoice[4] == created_at }
+  def find_all_invoices_by_created_at(created_at)
+    invoices.select { |invoice| invoice.created_at == created_at }
   end
 
-  def find_all_by_updated_at(updated_at)
-    repository.select { |invoice| invoice[5] == updated_at }
+  def find_all_invoices_by_updated_at(updated_at)
+    invoices.select { |invoice| invoice.updated_at == updated_at }
   end
 end
