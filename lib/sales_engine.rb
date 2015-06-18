@@ -4,77 +4,60 @@ require_relative 'merchant_repository'
 require_relative 'merchant'
 require_relative 'transaction_repository'
 require_relative 'transaction'
-require 'pry'
-# etc...
+require_relative 'customer_repository'
+require_relative 'customer'
+require_relative 'item_repository'
+require_relative 'item'
+require_relative 'invoice_item_repository'
+require_relative 'invoice_item'
+require_relative 'invoice_repository'
+require_relative 'invoice'
 
 class SalesEngine
-  attr_accessor :item_repository
-  attr_reader :merchant_data, :customer_data, :transaction_data, :invoice_data, :item_data, :invoice_item_data
 
-  def initialize
+  attr_accessor :invoice_item_repository, :merchant_repository, :customer_repository,
+                :item_repository, :data_directory, :invoice_repository, :transaction_repository
+
+  def initialize(data_directory="./test/fixtures")
+    @data_directory = data_directory
   end
+
 
   def startup
-    @merchant_data = CSV.open "./test/fixtures/merchants_test.csv", headers: true, header_converters: :symbol
-    @customer_data = CSV.open "./test/fixtures/customers_test.csv", headers: true, header_converters: :symbol
-    @invoice_item_data = CSV.open "./test/fixtures/invoice_items_test.csv", headers: true, header_converters: :symbol
-    @invoice_data = CSV.open "./test/fixtures/invoices_test.csv", headers: true, header_converters: :symbol
-    @item_data = CSV.open "./test/fixtures/items_test.csv", headers: true, header_converters: :symbol
-    @transaction_data = CSV.open "./test/fixtures/transactions_test.csv", headers: true, header_converters: :symbol
+    create_merchant_repository(get_data("#{data_directory}/merchants.csv"))
+    create_customer_repository(get_data("#{data_directory}/customers.csv"))
+    create_invoice_item_repository(get_data("#{data_directory}/invoice_items.csv"))
+    create_invoice_repository(get_data("#{data_directory}/invoices.csv"))
+    create_item_repository(get_data("#{data_directory}/items.csv"))
+    create_transaction_repository(get_data("#{data_directory}/transactions.csv"))
   end
 
-  def parse_merchant_data
-    parser = Parser.new
-    parser.parse_merchant_data(@merchant_data)
+  def get_data(file_name)
+    CSV.open "#{file_name}", headers: true, header_converters: :symbol
   end
 
-  def merchant_repository
-    MerchantRepository.new(parse_merchant_data, self)
+  def create_merchant_repository(merchant_data)
+    @merchant_repository = MerchantRepository.new(merchant_data, self)
   end
 
-  def parse_customer_data
-    parser = Parser.new
-    sanitized_customer_data = parser.parse_customer_data(@customer_data)
+  def create_customer_repository(customer_data)
+    @customer_repository = CustomerRepository.new(customer_data, self)
   end
 
-  def create_customer_repository
-    customer = CustomerRepository.new(parse_customer_data, self)
+  def create_invoice_item_repository(invoice_item_data)
+    @invoice_item_repository = InvoiceItemRepository.new(invoice_item_data, self)
   end
 
-  def parse_invoice_item_data
-    parser = Parser.new
-    sanitized_invoice_item_data = parser.parse_invoice_item_data(@invoice_item_data)
+  def create_invoice_repository(invoice_data)
+    @invoice_repository = InvoiceRepository.new(invoice_data, self)
   end
 
-  def create_invoice_item_repository
-    invoice_item = InvoiceItemRepository.new(parse_invoice_item_data, self)
+  def create_item_repository(item_data)
+    @item_repository = ItemRepository.new(item_data, self)
   end
 
-  def parse_invoice_data
-    parser = Parser.new
-    sanitized_invoice_data = parser.parse_invoice_data(@invoice_data)
-  end
-
-  def create_invoice_repository
-    invoice = InvoiceRepository.new(parse_invoice_data, self)
-  end
-
-  def parse_item_data
-    parser = Parser.new
-    sanitized_item_data = parser.parse_item_data(@item_data)
-  end
-
-  def item_repository
-    @item_repository = ItemRepository.new(parse_item_data, self)
-  end
-
-  def parse_transaction_data
-    parser = Parser.new
-    sanitized_transaction_data = parser.parse_transaction_data(@transaction_data)
-  end
-
-  def create_transaction_repository
-    transaction = TransactionRepository.new(parse_transaction_data, self)
+  def create_transaction_repository(transaction_data)
+    @transaction_repository = TransactionRepository.new(transaction_data, self)
   end
 
   # relationships
@@ -85,5 +68,7 @@ class SalesEngine
 
 end
 
-e = SalesEngine.new
-
+# e = SalesEngine.new
+# e.startup
+# williams = e.merchant_repository.find_all_merchants_by_name("Williamson Group")
+# williams.each { |merch| puts merch.id }

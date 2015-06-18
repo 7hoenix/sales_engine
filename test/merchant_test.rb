@@ -15,25 +15,28 @@ class MerchantTest < Minitest::Test
   def test_it_returns_a_list_of_items_with_the_same_merchant_id
 
     sales_engine = SalesEngine.new
-    sales_engine.item_repository = ItemRepository.new([
+
+    sales_engine.create_item_repository([
                 {id: 10, merchant_id: 1},
                 {id: 20, merchant_id: 2},
                 {id: 30, merchant_id: 3},
                 {id: 40, merchant_id: 1},
                 {id: 50, merchant_id: 9},
-            ], sales_engine)
+                                        ])
 
-    merchant_repo = sales_engine.merchant_repository
+    merchant_repo = sales_engine.create_merchant_repository([
+                {id: 1},
+                {id: 2},
+                {id: 3},
+                {id: 4},
+                {id: 5},
+                            ])
 
     merchant = Merchant.new({id: 1}, merchant_repo)
 
-    merchant_repo.find_items_for_merchant(merchant.items)
+    items = sales_engine.find_items_for_merchant(merchant.id)
 
-    items = merchant.items
-
-    # items = item_repo.find_all_items_by_merchant_id(merchant_id)
-
-    assert_equal [10, 40], items
+    assert_equal [10, 40], items.map { |item| item.id }
   end
 end
 
