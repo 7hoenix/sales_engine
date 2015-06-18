@@ -7,158 +7,120 @@ require_relative '../lib/merchant_repository'
 require_relative '../lib/merchant'
 
 class MerchantRepositoryTest < Minitest::Test
-  attr_reader :merchant_repository
+  def test_it_finds_the_first_example_of_merchant_by_name
+    sales_engine = "MY ENGINE"
+    hashes = [
+        {id: 1, name: "Walmart"},
+        {id: 2, name: "Safeway"},
+        {id: 3, name: "Walmart"},]
+    repo = MerchantRepository.new(hashes, sales_engine)
 
-  def setup
+    first_merchant = repo.find_merchant_by_name("Walmart")
 
-    merchant_data = [[1, "Jack", "2012-03-27 14:53:58 UTC", "2012-03-27 14:53:58 UTC"], [2, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"], [3, "Frank", "2012-03-27 14:53:60 UTC", "2012-03-27 14:53:60 UTC"]]
-    @merchant_repository = MerchantRepository.new(merchant_data, "self")
+    assert_equal [1], [first_merchant.id]
+
+    second_merchant = repo.find_merchant_by_name("Safeway")
+    assert_equal [2], [second_merchant.id]
+
+    # tv = repo.find_item_by_name("TV")
+    # assert_equal [], [tv.id]
 
   end
 
-  def test_it_loads_merchant_data
+  def test_it_finds_all_examples_of_merchants_by_name
+    sales_engine = "MY ENGINE"
+    hashes = [
+        {id: 1, name: "Walmart"},
+        {id: 2, name: "Safeway"},
+        {id: 3, name: "Walmart"},]
+    repo = MerchantRepository.new(hashes, sales_engine)
+
+    walmarts = repo.find_all_merchants_by_name("Walmart")
+    safeways = repo.find_all_merchants_by_name("Safeway")
+    albertsons = repo.find_all_merchants_by_name("Albertsons")
+
+    assert_equal [1, 3], walmarts.map { |walmart| walmart.id }
+    assert_equal [2], safeways.map { |safeway| safeway.id }
+    assert_equal [], albertsons.map { |albertson| albertson.id }
+  end
+
+  def test_it_finds_the_first_example_of_merchant_by_created_at
     skip
-    actual_merchant_repository = MerchantRepository.new()
-    merchant_data = actual_merchant_repository.merchant_data
+    sales_engine = "MY ENGINE"
+    hashes = [
+        {id: 1, created_at: Time.now},
+        {id: 2, created_at: (Time.now - 1)},
+        {id: 3, created_at: (Time.now - 2)},]
+    repo = MerchantRepository.new(hashes, sales_engine)
 
-    assert_equal "1, Schroeder-Jerde, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC " +
-                     "2, \"Klein, Rempel and Jones\", 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
-                     "3, Willms and Sons, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
-                     "4, Cummings-Thiel, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
-                     "5, Williamson Group, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
-                     "6, Williamson Group, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 16 : 12 : 25 UTC" +
-                     "7, Bernhard-Johns, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
-                     "8, \"Osinski, Pollich and Koelpin\", 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
-                     "9, Hand-Spencer, 2012-03-27 14 : 53 : 59 UTC, 2012-03-27 14 : 53 : 59 UTC" +
-                     "10, \"Bechtelar, Jones and Stokes\", 2012-03-27 14 : 54 : 00 UTC, 2012-03-27 14 : 54 : 00 UTC, merchants", merchant_data
+    first_created = repo.find_merchant_by_created_at(Time.now)
+
+    assert_equal [1], [first_created.id]
+
+    second_created = repo.find_merchant_by_created_at(Time.now - 1)
+    assert_equal [2], [second_created.id]
+
+    # tv = repo.find_item_by_name("TV")
+    # assert_equal [], [tv.id]
+
   end
 
-  def test_it_exist
+  def test_it_finds_all_examples_of_merchants_by_created_at
     skip
-    assert merchant_repository
+    sales_engine = "MY ENGINE"
+    hashes = [
+        {id: 1, created_at: Time.now},
+        {id: 2, created_at: (Time.now - 1)},
+        {id: 3, created_at: Time.now},]
+    repo = MerchantRepository.new(hashes, sales_engine)
+
+    nows = repo.find_all_merchants_by_created_at(Time.now)
+    yesterdays = repo.find_all_merchants_by_created_at(Time.now - 1)
+    three_days_agos = repo.find_all_merchants_by_created_at(Time.now - 3)
+
+    assert_equal [1, 3], nows.map { |now| now.id }
+    assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
+    assert_equal [], three_days_agos.map { |three_days_ago| three_days_ago.id }
   end
 
-  def test_the_repository_count_goes_up_by_three_when_you_add_three_instances_of_a_merchant
-    assert_equal 3, merchant_repository.merchants.count
-  end
-
-  def test_it_returns_all_instances_when_the_all_method_is_called
-    all_merchants = merchant_repository.all
-
-    expected = [[1, "Jack", "2012-03-27 14:53:58 UTC", "2012-03-27 14:53:58 UTC"], [2, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"], [3, "Frank", "2012-03-27 14:53:60 UTC", "2012-03-27 14:53:60 UTC"]]
-    assert_equal expected, all_merchants
-  end
-
-  def test_it_returns_a_random_instance_when_the_random_method_is_called
+  def test_it_finds_the_first_example_of_merchant_by_updated_at
     skip
-    # figure out how to stub so we can actually test this
-    merchant = Merchant.new(1, "Jack", "2012-03-27 14:53:58 UTC", "2012-03-27 14:53:58 UTC")
-    merchant2 = Merchant.new(2, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC")
-    merchants << merchant
-    merchants << merchant2
+    sales_engine = "MY ENGINE"
+    hashes = [
+        {id: 1, updated_at: Time.now},
+        {id: 2, updated_at: (Time.now - 1)},
+        {id: 3, updated_at: (Time.now - 2)},]
+    repo = MerchantRepository.new(hashes, sales_engine)
 
-    random_merchant = merchant_repository.random
+    first_updated = repo.find_merchant_by_updated_at(Time.now)
 
-    expected = [1, "Jack", "2012-03-27 14:53:58 UTC", "2012-03-27 14:53:58 UTC"]
-    assert_equal expected, random_merchant
+    assert_equal [1], [first_updated.id]
+
+    second_updated = repo.find_merchant_by_updated_at(Time.now - 1)
+    assert_equal [2], [second_updated.id]
+
+    # tv = repo.find_item_by_name("TV")
+    # assert_equal [], [tv.id]
+
   end
 
-  def test_it_finds_an_instance_of_merchant_by_searching_for_id
+  def test_it_finds_all_examples_of_merchants_by_updated_at
     skip
-    id = 2
+    sales_engine = "MY ENGINE"
+    hashes = [
+        {id: 1, updated_at: Time.now},
+        {id: 2, updated_at: (Time.now - 1)},
+        {id: 3, updated_at: Time.now},]
+    repo = MerchantRepository.new(hashes, sales_engine)
 
-    merchant_by_id = merchant_repository.find_by_id(id)
+    nows = repo.find_all_merchants_by_updated_at(Time.now)
+    yesterdays = repo.find_all_merchants_by_updated_at(Time.now - 1)
+    three_days_agos = repo.find_all_merchants_by_updated_at(Time.now - 3)
 
-    expected = [2, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"]
-
-    assert_equal expected, merchant_by_id
+    assert_equal [1, 3], nows.map { |now| now.id }
+    assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
+    assert_equal [], three_days_agos.map { |three_days_ago| three_days_ago.id }
   end
 
-  def test_it_finds_an_instance_of_merchant_by_searching_for_name
-    skip
-    name = "Jill"
-
-    merchant_by_name = merchant_repository.find_by_name(name)
-
-    expected = [2, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"]
-
-    assert_equal expected, merchant_by_name
-  end
-
-  def test_it_finds_an_instance_of_merchant_by_searching_for_created_at
-    skip
-    created_at = "2012-03-27 14:53:59 UTC"
-
-    merchant_by_created_at = merchant_repository.find_by_created_at(created_at)
-
-    expected = [2, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"]
-
-    assert_equal expected, merchant_by_created_at
-  end
-
-  def test_it_finds_an_instance_of_merchant_by_searching_for_updated_at
-    skip
-    updated_at = "2012-03-27 14:53:59 UTC"
-
-    merchant_by_updated_at = merchant_repository.find_by_updated_at(updated_at)
-
-    expected = [2, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"]
-
-    assert_equal expected, merchant_by_updated_at
-  end
-
-  def test_it_finds_all_instances_of_merchant_by_searching_for_id
-    skip
-    merchant4 = Merchant.new(2, "Jelly Bean", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC")
-    merchants << merchant4
-
-    id = 2
-
-    all_merchants_by_id = merchant_repository.find_all_by_id(id)
-    expected = [[2, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"], [2, "Jelly Bean", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"]]
-
-    assert_equal expected, all_merchants_by_id
-  end
-
-  def test_it_finds_all_instances_of_merchant_by_searching_for_name
-    skip
-    merchant4 = Merchant.new(4, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC")
-    merchants << merchant4
-
-    name = "Jill"
-
-    all_merchants_by_name = merchant_repository.find_all_by_name(name)
-    expected = [[2, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"], [4, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"]]
-
-    assert_equal expected, all_merchants_by_name
-  end
-
-  def test_it_finds_all_instances_of_merchant_by_searching_for_created_at
-    skip
-    row = [6, "Jelly Bean", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"]
-    merchant4 = Merchant.new(row, merchant_repository)
-    merchants << merchant4
-
-    created_at = "2012-03-27 14:53:59 UTC"
-
-    all_merchants_by_created_at = merchant_repository.find_all_by_created_at(created_at)
-    expected = [[2, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"], [6, "Jelly Bean", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"]]
-
-    assert_equal expected, all_merchants_by_created_at
-  end
-
-  def test_it_finds_all_instances_of_merchant_by_searching_for_updated_at
-    skip
-    row = [7, "Jelly Bean", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"]
-    merchant4 = Merchant.new(row, merchant_repository)
-    merchants << merchant4
-
-    updated_at = "2012-03-27 14:53:59 UTC"
-
-    all_merchants_by_updated_at = merchant_repository.find_all_by_updated_at(updated_at)
-    expected = [[2, "Jill", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"], [7, "Jelly Bean", "2012-03-27 14:53:59 UTC", "2012-03-27 14:53:59 UTC"]]
-
-    assert_equal expected, all_merchants_by_updated_at
-  end
 
 end
