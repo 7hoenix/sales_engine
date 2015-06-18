@@ -6,6 +6,11 @@ class Merchant
     @merchant_repository = merchant_repository
   end
 
+  # relationships
+
+  def items
+    merchant_repository.find_items_for_merchant(id)
+  end
 
   def id
     merchant_data[:id]

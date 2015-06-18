@@ -62,7 +62,7 @@ class SalesEngineTest < Minitest::Test
 
   def test_it_loads_merchant_data
     engine = SalesEngine.new
-    assert engine.create_merchant_repository
+    assert engine.merchant_repository
   end
 
   def test_it_loads_invoice_data
@@ -73,7 +73,7 @@ class SalesEngineTest < Minitest::Test
 
   def test_it_loads_item_data
     engine = SalesEngine.new
-    assert engine.create_item_repository
+    assert engine.item_repository
   end
 
   def test_it_loads_invoice_item_data

@@ -53,4 +53,12 @@ class MerchantRepository
   def find_all_merchants_by_updated_at(updated_at)
     merchants.select { |merchant| merchant.updated_at == updated_at }
   end
+
+
+  # relationships
+
+  def find_items_for_merchant(merchant_id)
+      sales_engine.find_items_for_merchant(merchant_id)
+  end
+
 end

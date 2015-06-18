@@ -8,9 +8,13 @@ require 'pry'
 # etc...
 
 class SalesEngine
+  attr_accessor :item_repository
   attr_reader :merchant_data, :customer_data, :transaction_data, :invoice_data, :item_data, :invoice_item_data
 
   def initialize
+  end
+
+  def startup
     @merchant_data = CSV.open "./test/fixtures/merchants_test.csv", headers: true, header_converters: :symbol
     @customer_data = CSV.open "./test/fixtures/customers_test.csv", headers: true, header_converters: :symbol
     @invoice_item_data = CSV.open "./test/fixtures/invoice_items_test.csv", headers: true, header_converters: :symbol
@@ -24,7 +28,7 @@ class SalesEngine
     parser.parse_merchant_data(@merchant_data)
   end
 
-  def create_merchant_repository
+  def merchant_repository
     MerchantRepository.new(parse_merchant_data, self)
   end
 
@@ -34,7 +38,7 @@ class SalesEngine
   end
 
   def create_customer_repository
-    CustomerRepository.new(parse_customer_data, self)
+    customer = CustomerRepository.new(parse_customer_data, self)
   end
 
   def parse_invoice_item_data
@@ -43,7 +47,7 @@ class SalesEngine
   end
 
   def create_invoice_item_repository
-    InvoiceItemRepository.new(parse_invoice_item_data, self)
+    invoice_item = InvoiceItemRepository.new(parse_invoice_item_data, self)
   end
 
   def parse_invoice_data
@@ -52,7 +56,7 @@ class SalesEngine
   end
 
   def create_invoice_repository
-    InvoiceRepository.new(parse_invoice_data, self)
+    invoice = InvoiceRepository.new(parse_invoice_data, self)
   end
 
   def parse_item_data
@@ -60,8 +64,8 @@ class SalesEngine
     sanitized_item_data = parser.parse_item_data(@item_data)
   end
 
-  def create_item_repository
-    ItemRepository.new(parse_item_data, self)
+  def item_repository
+    @item_repository = ItemRepository.new(parse_item_data, self)
   end
 
   def parse_transaction_data
@@ -70,10 +74,16 @@ class SalesEngine
   end
 
   def create_transaction_repository
-    TransactionRepository.new(parse_transaction_data, self)
+    transaction = TransactionRepository.new(parse_transaction_data, self)
+  end
+
+  # relationships
+
+  def find_items_for_merchant(merchant_id)
+    item_repository.find_all_items_by_merchant_id(merchant_id)
   end
 
 end
 
 e = SalesEngine.new
-e.create_merchant_repository
+
