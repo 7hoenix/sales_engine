@@ -1,12 +1,26 @@
 class Merchant
-  attr_reader :id, :name, :created_at, :updated_at, :repository
+  attr_reader :merchant_data, :merchant_repository
 
-  def initialize(row, repository="INSERT REPO HERE")
-    @id = row[0]
-    @name = row[1]
-    @created_at = row[2]
-    @updated_at = row[3]
-    @repository = repository
+  def initialize(merchant_data, merchant_repository)
+    @merchant_data = merchant_data
+    @merchant_repository = merchant_repository
+  end
+
+
+  def id
+    merchant_data[:id]
+  end
+
+  def name
+    merchant_data[:name]
+  end
+
+  def created_at
+    merchant_data[:created_at]
+  end
+
+  def updated_at
+    merchant_data[:updated_at]
   end
 end
 
