@@ -78,17 +78,17 @@ class InvoiceTest < Minitest::Test
 
 
     sales_engine.create_invoice_item_repository([
-                                                    {id: 100, item_id: 1},
-                                                    {id: 200, item_id: 2},
-                                                    {id: 300, item_id: 1},
-                                                    {id: 400, item_id: 3},
-                                                    {id: 500, item_id: 1},
+                                                    {invoice_id: 1, item_id: 100},
+                                                    {invoice_id: 2, item_id: 200},
+                                                    {invoice_id: 1, item_id: 100},
+                                                    {invoice_id: 4, item_id: 300},
+                                                    {invoice_id: 1, item_id: 100},
                                                 ])
 
     sales_engine.create_item_repository([
-                                            {id: 1},
-                                            {id: 2},
-                                            {id: 3},
+                                            {id: 100},
+                                            {id: 200},
+                                            {id: 300},
                                         ])
     invoice = Invoice.new({id: 1}, invoice_repo)
 

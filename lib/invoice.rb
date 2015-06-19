@@ -37,8 +37,6 @@ class Invoice
   end
 
   def items
-    require 'pry'; binding.pry
     invoice_repository.find_items_for_invoice(id)
   end
-
 end
