@@ -30,4 +30,15 @@ class Invoice
     invoice_data[:updated_at]
   end
 
+  # relationships
+
+  def transactions
+    invoice_repository.find_transactions_for_invoice(id)
+  end
+
+  def items
+    require 'pry'; binding.pry
+    invoice_repository.find_items_for_invoice(id)
+  end
+
 end

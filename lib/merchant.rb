@@ -6,12 +6,6 @@ class Merchant
     @merchant_repository = merchant_repository
   end
 
-  # relationships
-
-  def items
-    merchant_repository.find_items_for_merchant(id)
-  end
-
   def id
     merchant_data[:id]
   end
@@ -26,6 +20,17 @@ class Merchant
 
   def updated_at
     merchant_data[:updated_at]
+  end
+
+
+  # relationships
+
+  def items
+    merchant_repository.find_items_for_merchant(id)
+  end
+
+  def invoices
+    merchant_repository.find_invoices_for_merchant(id)
   end
 end
 

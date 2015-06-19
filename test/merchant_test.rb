@@ -34,15 +34,41 @@ class MerchantTest < Minitest::Test
 
     merchant = Merchant.new({id: 1}, merchant_repo)
 
-    items = sales_engine.find_items_for_merchant(merchant.id)
+    items = merchant_repo.find_items_for_merchant(merchant.id)
 
     assert_equal [10, 40], items.map { |item| item.id }
   end
+
+  def test_it_returns_a_collection_of_invoices_associated_with_a_merchant
+    sales_engine = SalesEngine.new
+
+    sales_engine.create_invoice_repository([
+        {id: 10, merchant_id: 1},
+        {id: 20, merchant_id: 2},
+        {id: 30, merchant_id: 1},
+        {id: 40, merchant_id: 3},
+        {id: 50, merchant_id: 1},
+    ])
+
+    merchant_repo = sales_engine.create_merchant_repository([
+    {id: 1},
+    {id: 2},
+    {id: 3},
+    {id: 4},
+    {id: 5},
+    ])
+
+    merchant = Merchant.new({id: 1}, merchant_repo)
+
+    invoices = merchant_repo.find_invoices_for_merchant(merchant.id)
+
+    assert_equal [10, 30, 50], invoices.map { |invoice| invoice.id}
+  end
 end
 
-    # repo = Minitest::Mock.new
-    # merchant = Merchant.new(data, repo)
-    # repo.expect(:find_items_for_merchant, nil, [1])
+# repo = Minitest::Mock.new
+# merchant = Merchant.new(data, repo)
+# repo.expect(:find_items_for_merchant, nil, [1])
     # merchant.items
     # repo.verify
     #

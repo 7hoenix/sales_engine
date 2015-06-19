@@ -69,4 +69,19 @@ class InvoiceRepository
   def find_all_invoices_by_updated_at(updated_at)
     invoices.select { |invoice| invoice.updated_at == updated_at }
   end
+
+  # relationships
+
+  def find_transactions_for_invoice(invoice_id)
+    sales_engine.find_transactions_for_invoice(invoice_id)
+  end
+
+  def find_invoice_items_for_invoice(invoice_id)
+    sales_engine.find_invoice_items_for_invoice(invoice_id)
+  end
+
+  def find_items_for_invoice(invoice_id)
+    sales_engine.find_items_for_invoice(invoice_id)
+  end
+
 end
