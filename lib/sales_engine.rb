@@ -45,7 +45,6 @@ class SalesEngine
   end
 
   def create_invoice_item_repository(invoice_item_data)
-    require 'pry'; binding.pry
     @invoice_item_repository = InvoiceItemRepository.new(invoice_item_data, self)
   end
 
@@ -66,46 +65,46 @@ class SalesEngine
 
   # merchant
   def find_items_for_merchant(merchant_id)
-    item_repository.find_all_items_by_merchant_id(merchant_id)
+    item_repository.find_all_by_merchant_id(merchant_id)
   end
 
   def find_invoices_for_merchant(merchant_id)
-    invoice_repository.find_all_invoices_by_merchant_id(merchant_id)
+    invoice_repository.find_all_by_merchant_id(merchant_id)
   end
 
   # invoice
   def find_transactions_for_invoice(invoice_id)
-    transaction_repository.find_all_transactions_by_invoice_id(invoice_id)
+    transaction_repository.find_all_by_invoice_id(invoice_id)
   end
 
   def find_invoice_items_for_invoice(invoice_id)
-    invoice_item_repository.find_all_invoice_items_by_invoice_id(invoice_id)
+    invoice_item_repository.find_all_by_invoice_id(invoice_id)
   end
 
   def find_items_through_invoice_items(invoice_id)
-    invoice_items = invoice_item_repository.find_all_invoice_items_by_invoice_id(invoice_id)
+    invoice_items = invoice_item_repository.find_all_by_invoice_id(invoice_id)
     invoice_items.map do |item|
-      item_repository.find_item_by_id(item.item_id)
+      item_repository.find_by_id(item.item_id)
     end
   end
 
   def find_customer_by_customer_id_for_invoice(customer_id)
-    customer_repository.find_customer_by_id(customer_id)
+    customer_repository.find_by_id(customer_id)
   end
 
   def find_merchant_by_merchant_id_for_invoice(merchant_id)
-    merchant_repository.find_merchant_by_id(merchant_id)
+    merchant_repository.find_by_id(merchant_id)
   end
 
 
   # invoice item
 
   def find_invoice_by_invoice_id_for_invoice_item(invoice_id)
-    invoice_repository.find_invoice_by_id(invoice_id)
+    invoice_repository.find_by_id(invoice_id)
   end
 
   def find_item_by_item_id_for_invoice_item(item_id)
-    item_repository.find_item_by_id(item_id)
+    item_repository.find_by_id(item_id)
   end
 
 end
