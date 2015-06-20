@@ -20,6 +20,10 @@ class ItemRepository
     items.shuffle.first
   end
 
+  def find_item_by_id(id)
+    items.find { |item| item.id == id }
+  end
+
   def find_item_by_name(name)
     items.find { |item| item.name == name }
   end
@@ -67,4 +71,10 @@ class ItemRepository
   def find_all_items_by_updated_at(updated_at)
     items.select { |item| item.updated_at == updated_at }
   end
+
+  # spec harness
+  def inspect
+    "#<#{self.class} #{@items.size} rows>"
+  end
+
 end

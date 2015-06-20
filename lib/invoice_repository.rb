@@ -69,4 +69,34 @@ class InvoiceRepository
   def find_all_invoices_by_updated_at(updated_at)
     invoices.select { |invoice| invoice.updated_at == updated_at }
   end
+
+
+  # relationships
+
+  def find_transactions_for_invoice(invoice_id)
+    sales_engine.find_transactions_for_invoice(invoice_id)
+  end
+
+  def find_invoice_items_for_invoice(invoice_id)
+    sales_engine.find_invoice_items_for_invoice(invoice_id)
+  end
+
+  def find_items_through_invoice_items(invoice_id)
+    sales_engine.find_items_through_invoice_items(invoice_id)
+  end
+
+  def find_customer_by_customer_id_for_invoice(customer_id)
+    sales_engine.find_customer_by_customer_id_for_invoice(customer_id)
+  end
+
+  def find_merchant_by_merchant_id_for_invoice(merchant_id)
+    sales_engine.find_merchant_by_merchant_id_for_invoice(merchant_id)
+  end
+
+  # spec harness
+
+  def inspect
+    "#<#{self.class} #{@invoices.size} rows>"
+  end
+
 end

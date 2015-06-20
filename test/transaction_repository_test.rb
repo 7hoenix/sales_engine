@@ -18,4 +18,12 @@ class TransactionRepositoryTest < Minitest::Test
     transactor.all
   end
 
+  def test_it_returns_transactions_by_searching_for_result
+    transaction_data = [{id: 1, result: "success"}, {id: 2, result: "not success"}, {id: 3, result: "success"}]
+    transactor = TransactionRepository.new(transaction_data, "engine")
+
+    transactions = transactor.find_all_transactions_by_result("success")
+    assert_equal [1, 3], transactions.map { |transaction| transaction.id }
+  end
+
 end

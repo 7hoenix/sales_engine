@@ -10,4 +10,10 @@ class ItemTest < Minitest::Test
 
     assert_equal "Widget", item.name
   end
+
+  def test_it_finds_all_invoice_items_associated_with_this_item
+    sales_engine = SalesEngine.new
+
+
+  end
 end
