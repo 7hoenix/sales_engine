@@ -83,8 +83,8 @@ class SalesEngine
 
   def find_items_through_invoice_items(invoice_id)
     invoice_items = invoice_item_repository.find_all_by_invoice_id(invoice_id)
-    invoice_items.map do |item|
-      item_repository.find_by_id(item.item_id)
+    invoice_items.map do |invoice_item|
+      item_repository.find_by_id(invoice_item.item_id)
     end
   end
 
@@ -111,6 +111,7 @@ end
 
 # engine = SalesEngine.new
 # engine.startup
+# require 'pry'; binding.pry
 # invoice_item = engine.invoice_item_repository.find_by_item_id 123
 # require 'pry'; binding.pry
 # puts invoice_item
