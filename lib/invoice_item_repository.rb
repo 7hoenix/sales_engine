@@ -1,3 +1,5 @@
+require_relative 'invoice_item'
+
 class InvoiceItemRepository
   attr_reader :sales_engine, :invoice_items, :invoice_item_data
 
