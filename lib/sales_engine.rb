@@ -45,7 +45,6 @@ class SalesEngine
   end
 
   def create_invoice_item_repository(invoice_item_data)
-    require 'pry'; binding.pry
     @invoice_item_repository = InvoiceItemRepository.new(invoice_item_data, self)
   end
 
