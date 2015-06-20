@@ -22,7 +22,7 @@ class CustomerRepository
     customers.shuffle.first
   end
 
-  def find_customer_by_id(id)
+  def find_by_id(id)
     customers.find { |customer| customer.id == id }
   end
 
@@ -40,10 +40,6 @@ class CustomerRepository
 
   def find_by_updated_at(updated_at)
     customers.find { |customer| customer.updated_at == updated_at }
-  end
-
-  def find_all_by_id(id)
-    customers.select { |customer| customer.id == id }
   end
 
   def find_all_by_first_name(first_name)

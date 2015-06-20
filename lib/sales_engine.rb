@@ -18,7 +18,7 @@ class SalesEngine
   attr_accessor :invoice_item_repository, :merchant_repository, :customer_repository,
                 :item_repository, :data_directory, :invoice_repository, :transaction_repository
 
-  def initialize(data_directory="./test/fixtures")
+  def initialize(data_directory="./data")
     @data_directory = data_directory
   end
 
@@ -45,6 +45,7 @@ class SalesEngine
   end
 
   def create_invoice_item_repository(invoice_item_data)
+    require 'pry'; binding.pry
     @invoice_item_repository = InvoiceItemRepository.new(invoice_item_data, self)
   end
 
@@ -108,8 +109,9 @@ class SalesEngine
   end
 
 end
-#
-# e = SalesEngine.new
-# e.startup
-# puts e.merchant_repository.find_merchant_by_id(2)
-#
+
+# engine = SalesEngine.new
+# engine.startup
+# invoice_item = engine.invoice_item_repository.find_by_item_id 123
+# require 'pry'; binding.pry
+# puts invoice_item
