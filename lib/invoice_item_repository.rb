@@ -77,4 +77,21 @@ class InvoiceItemRepository
   def find_all_invoice_items_by_updated_at(updated_at)
     invoice_items.select { |invoice_item| invoice_item.updated_at == updated_at }
   end
+
+
+  # relationships
+
+  def find_invoice_by_invoice_id_for_invoice_item(invoice_id)
+    sales_engine.find_invoice_by_invoice_id_for_invoice_item(invoice_id)
+  end
+
+  def find_item_by_item_id_for_invoice_item(item_id)
+    sales_engine.find_item_by_item_id_for_invoice_item(item_id)
+  end
+
+
+  # spec harness
+  def inspect
+    "#<#{self.class} #{@invoice_items.size} rows>"
+  end
 end

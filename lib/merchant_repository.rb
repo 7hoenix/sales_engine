@@ -38,10 +38,6 @@ class MerchantRepository
     merchants.find { |merchant| merchant.updated_at == updated_at }
   end
 
-  def find_all_merchants_by_id(id)
-    merchants.select { |merchant| merchant.id == id }
-  end
-
   def find_all_merchants_by_name(name)
     merchants.select { |merchant| merchant.name == name }
   end
@@ -63,6 +59,11 @@ class MerchantRepository
 
   def find_invoices_for_merchant(merchant_id)
     sales_engine.find_invoices_for_merchant(merchant_id)
+  end
+
+  # spec harness
+  def inspect
+    "#<#{self.class} #{@merchants.size} rows>"
   end
 
 end

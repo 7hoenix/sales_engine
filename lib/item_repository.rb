@@ -72,4 +72,9 @@ class ItemRepository
     items.select { |item| item.updated_at == updated_at }
   end
 
+  # spec harness
+  def inspect
+    "#<#{self.class} #{@items.size} rows>"
+  end
+
 end

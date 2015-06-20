@@ -45,81 +45,90 @@ class MerchantRepositoryTest < Minitest::Test
   end
 
   def test_it_finds_the_first_example_of_merchant_by_created_at
-    skip
     sales_engine = "MY ENGINE"
-    hashes = [
-        {id: 1, created_at: Time.now},
-        {id: 2, created_at: (Time.now - 1)},
-        {id: 3, created_at: (Time.now - 2)},]
-    repo = MerchantRepository.new(hashes, sales_engine)
+    t = Time.now
+    merchant_data = [
+        {id: 1, created_at: t},
+        {id: 2, created_at: t - 200},
+        {id: 3, created_at: t},]
+    merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    first_created = repo.find_merchant_by_created_at(Time.now)
+    merchant = merchant_repository.find_merchant_by_created_at(t)
 
-    assert_equal [1], [first_created.id]
-
-    second_created = repo.find_merchant_by_created_at(Time.now - 1)
-    assert_equal [2], [second_created.id]
-
-    # tv = repo.find_item_by_name("TV")
-    # assert_equal [], [tv.id]
-
+    assert_equal 1, merchant.id
+    # assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
+    # assert_equal [], three_days_agos.map { |three_days_ago| three_days_ago.id }
   end
 
   def test_it_finds_all_examples_of_merchants_by_created_at
-    skip
     sales_engine = "MY ENGINE"
-    hashes = [
-        {id: 1, created_at: Time.now},
-        {id: 2, created_at: (Time.now - 1)},
-        {id: 3, created_at: Time.now},]
-    repo = MerchantRepository.new(hashes, sales_engine)
+    t = Time.now
+    merchant_data = [
+        {id: 1, created_at: t},
+        {id: 2, created_at: t - 200},
+        {id: 3, created_at: t},]
+    merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    nows = repo.find_all_merchants_by_created_at(Time.now)
-    yesterdays = repo.find_all_merchants_by_created_at(Time.now - 1)
-    three_days_agos = repo.find_all_merchants_by_created_at(Time.now - 3)
+    merchants = merchant_repository.find_all_merchants_by_created_at(t)
 
-    assert_equal [1, 3], nows.map { |now| now.id }
-    assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
-    assert_equal [], three_days_agos.map { |three_days_ago| three_days_ago.id }
+    assert_equal [1, 3], merchants.map { |merchant| merchant.id }
+    # assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
+    # assert_equal [], three_days_agos.map { |three_days_ago| three_days_ago.id }
   end
 
   def test_it_finds_the_first_example_of_merchant_by_updated_at
-    skip
     sales_engine = "MY ENGINE"
-    hashes = [
-        {id: 1, updated_at: Time.now},
-        {id: 2, updated_at: (Time.now - 1)},
-        {id: 3, updated_at: (Time.now - 2)},]
-    repo = MerchantRepository.new(hashes, sales_engine)
+    t = Time.now
+    merchant_data = [
+        {id: 1, updated_at: t},
+        {id: 2, updated_at: t - 200},
+        {id: 3, updated_at: t},]
+    merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    first_updated = repo.find_merchant_by_updated_at(Time.now)
+    merchant = merchant_repository.find_merchant_by_updated_at(t)
 
-    assert_equal [1], [first_updated.id]
-
-    second_updated = repo.find_merchant_by_updated_at(Time.now - 1)
-    assert_equal [2], [second_updated.id]
-
-    # tv = repo.find_item_by_name("TV")
-    # assert_equal [], [tv.id]
-
+    assert_equal 1, merchant.id
+    # assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
+    # assert_equal [], three_days_agos.map { |three_days_ago| three_days_ago.id }
   end
 
   def test_it_finds_all_examples_of_merchants_by_updated_at
-    skip
     sales_engine = "MY ENGINE"
-    hashes = [
-        {id: 1, updated_at: Time.now},
-        {id: 2, updated_at: (Time.now - 1)},
-        {id: 3, updated_at: Time.now},]
-    repo = MerchantRepository.new(hashes, sales_engine)
+    t = Time.now
+    merchant_data = [
+        {id: 1, updated_at: t},
+        {id: 2, updated_at: t - 200},
+        {id: 3, updated_at: t},]
+    merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    nows = repo.find_all_merchants_by_updated_at(Time.now)
-    yesterdays = repo.find_all_merchants_by_updated_at(Time.now - 1)
-    three_days_agos = repo.find_all_merchants_by_updated_at(Time.now - 3)
+    merchants = merchant_repository.find_all_merchants_by_updated_at(t)
 
-    assert_equal [1, 3], nows.map { |now| now.id }
-    assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
-    assert_equal [], three_days_agos.map { |three_days_ago| three_days_ago.id }
+    assert_equal [1, 3], merchants.map { |merchant| merchant.id }
+    # assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
+    # assert_equal [], three_days_agos.map { |three_days_ago| three_days_ago.id }
+  end
+
+
+  def test_it_finds_all_merchants
+    sales_engine = "MY ENGINE"
+    merchant_data = [{id: 1}, {id: 2}, {id: 3}]
+    merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
+
+    merchants = merchant_repository.all
+
+    assert_equal [1, 2, 3], merchants.map { |merchant| merchant.id }
+  end
+
+  def test_it_finds_a_merchant_by_id
+    sales_engine = "My ENGINE"
+    merchant_data = [{id: 1}, {id: 2}, {id: 3}]
+    merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
+
+    id = 2
+
+    merchant = merchant_repository.find_merchant_by_id(id)
+
+    assert_equal 2, merchant.id
   end
 
 

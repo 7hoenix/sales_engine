@@ -85,4 +85,18 @@ class InvoiceRepository
     sales_engine.find_items_through_invoice_items(invoice_id)
   end
 
+  def find_customer_by_customer_id_for_invoice(customer_id)
+    sales_engine.find_customer_by_customer_id_for_invoice(customer_id)
+  end
+
+  def find_merchant_by_merchant_id_for_invoice(merchant_id)
+    sales_engine.find_merchant_by_merchant_id_for_invoice(merchant_id)
+  end
+
+  # spec harness
+
+  def inspect
+    "#<#{self.class} #{@invoices.size} rows>"
+  end
+
 end

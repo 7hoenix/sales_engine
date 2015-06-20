@@ -62,4 +62,9 @@ class CustomerRepository
     customers.select { |customer| customer.updated_at == updated_at }
   end
 
+  # spec harness
+  def inspect
+    "#<#{self.class} #{@customers.size} rows>"
+  end
+
 end

@@ -44,4 +44,12 @@ class Invoice
   def items
     invoice_repository.find_items_through_invoice_items(id)
   end
+
+  def customer
+    invoice_repository.find_customer_by_customer_id_for_invoice(customer_id)
+  end
+
+  def merchant
+    invoice_repository.find_merchant_by_merchant_id_for_invoice(merchant_id)
+  end
 end
