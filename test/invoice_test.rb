@@ -33,14 +33,12 @@ class InvoiceTest < Minitest::Test
                                                    {id: 50, invoice_id: 1},
                                                ])
     invoice = Invoice.new({id: 1}, invoice_repo)
-
-    transactions = invoice_repo.find_transactions_for_invoice(invoice.id)
-
+    transactions = invoice.transactions
     assert_equal [10, 30, 50], transactions.map { |transaction| transaction.id }
     end
 
     def test_it_returns_a_list_of_all_invoice_items_with_the_associated_invoice
-    sales_engine = SalesEngine.new
+      sales_engine = SalesEngine.new
 
 
     invoice_repo = sales_engine.create_invoice_repository([
@@ -60,7 +58,7 @@ class InvoiceTest < Minitest::Test
                                                ])
     invoice = Invoice.new({id: 1}, invoice_repo)
 
-    invoice_items = invoice_repo.find_invoice_items_for_invoice(invoice.id)
+    invoice_items = invoice.invoice_items
 
     assert_equal [10, 30, 50], invoice_items.map { |invoice_item| invoice_item.id }
   end
@@ -69,32 +67,32 @@ class InvoiceTest < Minitest::Test
     sales_engine = SalesEngine.new
 
     invoice_repo = sales_engine.create_invoice_repository([
-                                                              {id: 1},
-                                                              {id: 2},
-                                                              {id: 3},
-                                                              {id: 4},
-                                                              {id: 5},
+                                                    {id: 2},
+                                                    {id: 3},
+                                                    {id: 4},
+                                                    {id: 6},
                                                           ])
 
-
     sales_engine.create_invoice_item_repository([
-                                                    {invoice_id: 1, item_id: 100},
-                                                    {invoice_id: 2, item_id: 200},
-                                                    {invoice_id: 1, item_id: 100},
-                                                    {invoice_id: 4, item_id: 300},
-                                                    {invoice_id: 1, item_id: 100},
+                      {invoice_id: 5, item_id: 10},
+                      {invoice_id: 2, item_id: 20},
+                      {invoice_id: 5, item_id: 30},
+                      {invoice_id: 4, item_id: 40},
+                      {invoice_id: 5, item_id: 50},
                                                 ])
 
     sales_engine.create_item_repository([
-                                            {id: 100},
-                                            {id: 200},
-                                            {id: 300},
+                                {id: 10},
+                                {id: 20},
+                                {id: 30},
+                                {id: 40},
+                                {id: 50},
                                         ])
-    invoice = Invoice.new({id: 1}, invoice_repo)
 
-    invoice.items
-    items = invoice_repo.find_items_for_invoice(invoice.id)
+    invoice = Invoice.new({id: 5}, invoice_repo)
 
-    assert_equal [100, 300, 500], items.map { |item| item.id }
+    items = invoice.items
+
+    assert_equal [10, 30, 50], items.map { |item| item.id }
   end
 end

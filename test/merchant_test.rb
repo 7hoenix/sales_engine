@@ -34,7 +34,8 @@ class MerchantTest < Minitest::Test
 
     merchant = Merchant.new({id: 1}, merchant_repo)
 
-    items = merchant_repo.find_items_for_merchant(merchant.id)
+    items = merchant.items
+        # merchant_repo.find_items_for_merchant(merchant.id)
 
     assert_equal [10, 40], items.map { |item| item.id }
   end
@@ -60,7 +61,8 @@ class MerchantTest < Minitest::Test
 
     merchant = Merchant.new({id: 1}, merchant_repo)
 
-    invoices = merchant_repo.find_invoices_for_merchant(merchant.id)
+    invoices = merchant.invoices
+        # merchant_repo.find_invoices_for_merchant(merchant.id)
 
     assert_equal [10, 30, 50], invoices.map { |invoice| invoice.id}
   end

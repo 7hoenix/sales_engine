@@ -30,13 +30,18 @@ class Invoice
     invoice_data[:updated_at]
   end
 
+
   # relationships
 
   def transactions
     invoice_repository.find_transactions_for_invoice(id)
   end
 
+  def invoice_items
+    invoice_repository.find_invoice_items_for_invoice(id)
+  end
+
   def items
-    invoice_repository.find_items_for_invoice(id)
+    invoice_repository.find_items_through_invoice_items(id)
   end
 end

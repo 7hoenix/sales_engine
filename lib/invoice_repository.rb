@@ -70,6 +70,7 @@ class InvoiceRepository
     invoices.select { |invoice| invoice.updated_at == updated_at }
   end
 
+
   # relationships
 
   def find_transactions_for_invoice(invoice_id)
@@ -80,8 +81,8 @@ class InvoiceRepository
     sales_engine.find_invoice_items_for_invoice(invoice_id)
   end
 
-  def find_items_for_invoice(invoice_id)
-    sales_engine.find_items_for_invoice(invoice_id)
+  def find_items_through_invoice_items(invoice_id)
+    sales_engine.find_items_through_invoice_items(invoice_id)
   end
 
 end

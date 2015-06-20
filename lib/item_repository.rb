@@ -20,6 +20,10 @@ class ItemRepository
     items.shuffle.first
   end
 
+  def find_item_by_id(id)
+    items.find { |item| item.id == id }
+  end
+
   def find_item_by_name(name)
     items.find { |item| item.name == name }
   end

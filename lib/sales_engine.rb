@@ -37,7 +37,7 @@ class SalesEngine
   end
 
   def create_merchant_repository(merchant_data)
-    @merchant_repository ||= MerchantRepository.new(merchant_data, self)
+    @merchant_repository = MerchantRepository.new(merchant_data, self)
   end
 
   def create_customer_repository(customer_data)
@@ -63,6 +63,7 @@ class SalesEngine
 
   # relationships
 
+  # merchant
   def find_items_for_merchant(merchant_id)
     item_repository.find_all_items_by_merchant_id(merchant_id)
   end
@@ -71,21 +72,25 @@ class SalesEngine
     invoice_repository.find_all_invoices_by_merchant_id(merchant_id)
   end
 
+  # invoice
   def find_transactions_for_invoice(invoice_id)
-    transaction_repository.find_all_by_invoice_id(invoice_id)
+    transaction_repository.find_all_transactions_by_invoice_id(invoice_id)
   end
 
   def find_invoice_items_for_invoice(invoice_id)
     invoice_item_repository.find_all_invoice_items_by_invoice_id(invoice_id)
   end
 
-  def find_items_for_invoice(invoice_id)
-    invoice_item_repository.find_all_invoice_items_by_item_id(invoice_id)
+  def find_items_through_invoice_items(invoice_id)
+    invoice_items = invoice_item_repository.find_all_invoice_items_by_invoice_id(invoice_id)
+    invoice_items.map do |item|
+      item_repository.find_item_by_id(item.item_id)
+    end
   end
 
 end
-
+#
 # e = SalesEngine.new
 # e.startup
-# williams = e.merchant_repository.find_all_merchants_by_name("Williamson Group")
-# williams.each { |merch| puts merch.id }
+# puts e.merchant_repository.find_merchant_by_id(2)
+#
