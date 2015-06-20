@@ -52,6 +52,9 @@ class TransactionRepository
     transactions.find { |transaction| transaction.updated_at == updated_at }
   end
 
+  def find_all_by_id(id)
+    transactions.select { |transaction| transaction.id == id }
+  end
 
   def find_all_by_invoice_id(invoice_id)
     transactions.select { |transaction| transaction.invoice_id == invoice_id }
