@@ -9,17 +9,17 @@ require_relative '../lib/merchant'
 class MerchantRepositoryTest < Minitest::Test
   def test_it_finds_the_first_example_of_merchant_by_name
     sales_engine = "MY ENGINE"
-    hashes = [
+    merchant_data = [
         {id: 1, name: "Walmart"},
         {id: 2, name: "Safeway"},
         {id: 3, name: "Walmart"},]
-    repo = MerchantRepository.new(hashes, sales_engine)
+    merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    first_merchant = repo.find_merchant_by_name("Walmart")
+    first_merchant = merchant_repository.find_by_name("Walmart")
 
     assert_equal [1], [first_merchant.id]
 
-    second_merchant = repo.find_merchant_by_name("Safeway")
+    second_merchant = merchant_repository.find_by_name("Safeway")
     assert_equal [2], [second_merchant.id]
 
     # tv = repo.find_item_by_name("TV")
@@ -29,15 +29,15 @@ class MerchantRepositoryTest < Minitest::Test
 
   def test_it_finds_all_examples_of_merchants_by_name
     sales_engine = "MY ENGINE"
-    hashes = [
+    merchant_data = [
         {id: 1, name: "Walmart"},
         {id: 2, name: "Safeway"},
         {id: 3, name: "Walmart"},]
-    repo = MerchantRepository.new(hashes, sales_engine)
+    merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    walmarts = repo.find_all_merchants_by_name("Walmart")
-    safeways = repo.find_all_merchants_by_name("Safeway")
-    albertsons = repo.find_all_merchants_by_name("Albertsons")
+    walmarts = merchant_repository.find_all_by_name("Walmart")
+    safeways = merchant_repository.find_all_by_name("Safeway")
+    albertsons = merchant_repository.find_all_by_name("Albertsons")
 
     assert_equal [1, 3], walmarts.map { |walmart| walmart.id }
     assert_equal [2], safeways.map { |safeway| safeway.id }
@@ -53,7 +53,7 @@ class MerchantRepositoryTest < Minitest::Test
         {id: 3, created_at: t},]
     merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    merchant = merchant_repository.find_merchant_by_created_at(t)
+    merchant = merchant_repository.find_by_created_at(t)
 
     assert_equal 1, merchant.id
     # assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
@@ -69,7 +69,7 @@ class MerchantRepositoryTest < Minitest::Test
         {id: 3, created_at: t},]
     merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    merchants = merchant_repository.find_all_merchants_by_created_at(t)
+    merchants = merchant_repository.find_all_by_created_at(t)
 
     assert_equal [1, 3], merchants.map { |merchant| merchant.id }
     # assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
@@ -85,7 +85,7 @@ class MerchantRepositoryTest < Minitest::Test
         {id: 3, updated_at: t},]
     merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    merchant = merchant_repository.find_merchant_by_updated_at(t)
+    merchant = merchant_repository.find_by_updated_at(t)
 
     assert_equal 1, merchant.id
     # assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
@@ -101,7 +101,7 @@ class MerchantRepositoryTest < Minitest::Test
         {id: 3, updated_at: t},]
     merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    merchants = merchant_repository.find_all_merchants_by_updated_at(t)
+    merchants = merchant_repository.find_all_by_updated_at(t)
 
     assert_equal [1, 3], merchants.map { |merchant| merchant.id }
     # assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
@@ -126,7 +126,7 @@ class MerchantRepositoryTest < Minitest::Test
 
     id = 2
 
-    merchant = merchant_repository.find_merchant_by_id(id)
+    merchant = merchant_repository.find_by_id(id)
 
     assert_equal 2, merchant.id
   end
