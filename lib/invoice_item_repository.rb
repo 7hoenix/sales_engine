@@ -8,6 +8,7 @@ class InvoiceItemRepository
     @sales_engine = sales_engine
     @invoice_items = []
     load_up_data
+    require 'pry'; binding.pry
   end
 
   def load_up_data
