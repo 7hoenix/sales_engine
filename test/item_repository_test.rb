@@ -1,12 +1,3 @@
-# id,
-# name,
-# description,
-# unit_price,
-# merchant_id,
-# created_at,
-# updated_at
-
-
 require 'minitest/autorun'
 require 'minitest/pride'
 require_relative '../lib/item_repository'

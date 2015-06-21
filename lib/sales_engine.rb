@@ -1,5 +1,4 @@
 require 'csv'
-require_relative 'parser'
 require_relative 'merchant_repository'
 require_relative 'merchant'
 require_relative 'transaction_repository'
@@ -131,8 +130,6 @@ class SalesEngine
 
 end
 
- # engine = SalesEngine.new
- # engine.startup
+ engine = SalesEngine.new.startup
 
-# invoice_item = engine.invoice_item_repository.find_by_item_id 123
-# puts invoice_item
+puts engine

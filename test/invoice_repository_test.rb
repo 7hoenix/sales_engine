@@ -1,10 +1,3 @@
-# id,
-# customer_id,
-# merchant_id,
-# status,
-# created_at,
-# updated_at
-
 require 'minitest/autorun'
 require 'minitest/pride'
 require_relative '../lib/invoice_repository'
