@@ -129,7 +129,3 @@ class SalesEngine
   end
 
 end
-
- engine = SalesEngine.new.startup
-
-puts engine
