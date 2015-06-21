@@ -34,7 +34,9 @@ class Transaction
     transaction_data[:updated_at]
   end
 
-  def transaction_repository
-    transaction_repository[:transaction_repository]
+  # relationships
+
+  def invoice
+    transaction_repository.find_invoice_by_transaction_id(invoice_id)
   end
 end

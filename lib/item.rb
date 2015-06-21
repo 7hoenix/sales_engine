@@ -33,4 +33,14 @@ class Item
   def updated_at
     item_data[:updated_at]
   end
+
+#   relationship
+
+  def invoice_items
+    item_repository.find_invoice_items_by_item_id(id)
+  end
+
+  def merchant
+    item_repository.find_merchant_for_item(merchant_id)
+  end
 end

@@ -58,6 +58,12 @@ class CustomerRepository
     customers.select { |customer| customer.updated_at == updated_at }
   end
 
+  # relationship
+
+  def find_invoices_for_customer(customer_id)
+    sales_engine.find_invoices_for_customer(customer_id)
+  end
+
   # spec harness
   def inspect
     "#<#{self.class} #{@customers.size} rows>"
