@@ -68,18 +68,15 @@ end
   def test_it_finds_the_first_item_by_unit_price
     sales_engine = "MY ENGINE"
     hashes = [
-        {id: 1, unit_price: 20},
-        {id: 2, unit_price: 30},
-        {id: 3, unit_price: 10},]
+        {id: 1, unit_price: 2000},
+        {id: 2, unit_price: 3000},
+        {id: 3, unit_price: 1000},]
     repo = ItemRepository.new(hashes, sales_engine)
 
     unit_price_of_30 = repo.find_by_unit_price(30)
-      require 'pry'; binding.pry
     assert_equal [2], [unit_price_of_30.id]
-require 'pry'; binding.pry
     unit_price_of_10 = repo.find_by_unit_price(10)
     assert_equal [3], [unit_price_of_10.id]
-require 'pry'; binding.pry
     # tv = repo.find_item_by_name("TV")
     # assert_equal [], [tv.id]
 
@@ -210,9 +207,9 @@ def test_it_finds_all_items_by_name
 
     sales_engine = "MY ENGINE"
     hashes = [
-        {id: 1, unit_price: 20},
-        {id: 2, unit_price: 10},
-        {id: 3, unit_price: 20},]
+        {id: 1, unit_price: 2000},
+        {id: 2, unit_price: 1000},
+        {id: 3, unit_price: 2000},]
     repo = ItemRepository.new(hashes, sales_engine)
 
     twenties = repo.find_all_by_unit_price(20)
