@@ -80,6 +80,12 @@ class TransactionRepository
     transactions.select { |transaction| transaction.updated_at == updated_at }
   end
 
+  # relationships
+
+  def find_invoice_by_transaction_id(invoice_id)
+    sales_engine.find_invoice_by_transaction_id(invoice_id)
+  end
+
 
   # spec harness
   def inspect

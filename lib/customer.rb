@@ -26,4 +26,10 @@ class Customer
     customer_data[:updated_at]
   end
 
+#   relationship
+
+  def invoices
+    customer_repository.find_invoices_for_customer(id)
+  end
+
 end

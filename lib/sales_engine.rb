@@ -83,8 +83,8 @@ class SalesEngine
 
   def find_items_through_invoice_items(invoice_id)
     invoice_items = invoice_item_repository.find_all_by_invoice_id(invoice_id)
-    invoice_items.map do |item|
-      item_repository.find_by_id(item.item_id)
+    invoice_items.map do |invoice_item|
+      item_repository.find_by_id(invoice_item.item_id)
     end
   end
 
@@ -107,10 +107,32 @@ class SalesEngine
     item_repository.find_by_id(item_id)
   end
 
+#   item
+
+  def find_invoice_items_by_item_id(item_id)
+    invoice_item_repository.find_all_by_item_id(item_id)
+  end
+
+  def find_merchant_for_item(merchant_id)
+    merchant_repository.find_by_id(merchant_id)
+  end
+
+  # transaction
+
+  def find_invoice_by_transaction_id(invoice_id)
+    invoice_repository.find_by_id(invoice_id)
+  end
+
+#   customer
+
+  def find_invoices_for_customer(customer_id)
+    invoice_repository.find_all_by_customer_id(customer_id)
+  end
+
 end
 
-# engine = SalesEngine.new
-# engine.startup
+ # engine = SalesEngine.new
+ # engine.startup
+
 # invoice_item = engine.invoice_item_repository.find_by_item_id 123
-# require 'pry'; binding.pry
 # puts invoice_item

@@ -76,6 +76,16 @@ class ItemRepository
     items.select { |item| item.updated_at == updated_at }
   end
 
+  # relationship
+
+  def find_invoice_items_by_item_id(item_id)
+    sales_engine.find_invoice_items_by_item_id(item_id)
+  end
+
+  def find_merchant_for_item(merchant_id)
+    sales_engine.find_merchant_for_item(merchant_id)
+  end
+
   # spec harness
   def inspect
     "#<#{self.class} #{@items.size} rows>"
