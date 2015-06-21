@@ -7,11 +7,11 @@ class Transaction
   end
 
   def id
-    transaction_data[:id]
+    transaction_data[:id].to_i
   end
 
   def invoice_id
-    transaction_data[:invoice_id]
+    transaction_data[:invoice_id].to_i
   end
 
   def credit_card_number

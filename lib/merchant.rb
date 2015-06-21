@@ -7,7 +7,7 @@ class Merchant
   end
 
   def id
-    merchant_data[:id]
+    merchant_data[:id].to_i
   end
 
   def name

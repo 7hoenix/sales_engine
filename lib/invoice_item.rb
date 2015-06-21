@@ -1,3 +1,6 @@
+require 'bigdecimal'
+require 'bigdecimal/util'
+
 class InvoiceItem
   attr_reader :invoice_item_repository, :invoice_item_data
 
@@ -7,23 +10,23 @@ class InvoiceItem
   end
 
   def id
-    invoice_item_data[:id]
+    invoice_item_data[:id].to_i
   end
 
   def item_id
-    invoice_item_data[:item_id]
+    invoice_item_data[:item_id].to_i
   end
 
   def invoice_id
-    invoice_item_data[:invoice_id]
+    invoice_item_data[:invoice_id].to_i
   end
 
   def quantity
-    invoice_item_data[:quantity]
+    invoice_item_data[:quantity].to_i
   end
 
   def unit_price
-    invoice_item_data[:unit_price]
+    BigDecimal.new(invoice_item_data[:unit_price]) / 100
   end
 
   def created_at

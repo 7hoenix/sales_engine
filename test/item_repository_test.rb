@@ -83,12 +83,12 @@ end
     repo = ItemRepository.new(hashes, sales_engine)
 
     unit_price_of_30 = repo.find_by_unit_price(30)
-
+      require 'pry'; binding.pry
     assert_equal [2], [unit_price_of_30.id]
-
+require 'pry'; binding.pry
     unit_price_of_10 = repo.find_by_unit_price(10)
     assert_equal [3], [unit_price_of_10.id]
-
+require 'pry'; binding.pry
     # tv = repo.find_item_by_name("TV")
     # assert_equal [], [tv.id]
 
@@ -314,5 +314,18 @@ def test_it_finds_all_items_by_name
     assert repo.random
 
   end
-
+  #
+  # def test_it_finds_item_by_unit_price
+  #   sales_engine = SalesEngine.new
+  #
+  #   item_repository = ItemRepository.new([
+  #                                            {id: 1, unit_price: 75107},
+  #                                            {id: 2, unit_price: 30323},
+  #                                            {id: 3, unit_price: 45123},
+  #                                        ], sales_engine)
+  #
+  #   item = item_repository.find_by_unit_price
+  #
+  #   assert_equal 60, merchant.id
+  # end
 end
