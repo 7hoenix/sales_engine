@@ -114,11 +114,11 @@ class InvoiceItemRepositoryTest < Minitest::Test
         {id: 3, unit_price: 13635},]
     repo = InvoiceItemRepository.new(hashes, sales_engine)
 
-    first_invoice_item = repo.find_by_unit_price(13635)
+    first_invoice_item = repo.find_by_unit_price(136.35)
 
     assert_equal [1], [first_invoice_item.id]
 
-    second_invoice_item = repo.find_by_unit_price(34873)
+    second_invoice_item = repo.find_by_unit_price(348.73)
     assert_equal [2], [second_invoice_item.id]
 
   end
@@ -131,9 +131,9 @@ class InvoiceItemRepositoryTest < Minitest::Test
         {id: 3, unit_price: 13635},]
     repo = InvoiceItemRepository.new(hashes, sales_engine)
 
-    invoice_thirteen_ks = repo.find_all_by_unit_price(13635)
-    invoice_thirty_ks = repo.find_all_by_unit_price(34873)
-    invoice_fifteen_ks = repo.find_all_by_unit_price(15000)
+    invoice_thirteen_ks = repo.find_all_by_unit_price(136.35)
+    invoice_thirty_ks = repo.find_all_by_unit_price(348.73)
+    invoice_fifteen_ks = repo.find_all_by_unit_price(150.00)
 
     assert_equal [1, 3], invoice_thirteen_ks.map { |invoice_thirteen_k| invoice_thirteen_k.id }
     assert_equal [2], invoice_thirty_ks.map { |invoice_thirty_k| invoice_thirty_k.id }
