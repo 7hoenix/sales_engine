@@ -61,6 +61,12 @@ class MerchantRepository
     sales_engine.find_invoices_for_merchant(merchant_id)
   end
 
+  # business intelligence
+
+  def find_revenue_for_merchant(merchant_id)
+    sales_engine.find_revenue_for_merchant(merchant_id)
+  end
+
   # spec harness
   def inspect
     "#<#{self.class} #{@merchants.size} rows>"

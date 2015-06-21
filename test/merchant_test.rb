@@ -66,16 +66,29 @@ class MerchantTest < Minitest::Test
 
     assert_equal [10, 30, 50], invoices.map { |invoice| invoice.id}
   end
-end
 
-# repo = Minitest::Mock.new
-# merchant = Merchant.new(data, repo)
-# repo.expect(:find_items_for_merchant, nil, [1])
-    # merchant.items
-    # repo.verify
-    #
-    # engine = Minitest::Mock.new
-    # merchant_repo = MerchantRepository(merchant_data_set, engine)
-    # engine.expect(:find_items_for_merchant, nil, [1])
-    #   merchant_repo.find_by_merchant_id
-    # engine.verify
+  def test_it_returns_total_revenue_for_merchant_across_all_transactions
+    sales_engine = SalesEngine.new
+
+    merchant_repository = sales_engine.create_merchant_repository([
+                                                                      {id: 1},
+                                                                  ])
+    sales_engine.create_invoice_repository([
+                                               {id: 10, merchant_id: 1},
+                                           ])
+
+    sales_engine.create_transaction_repository([
+                                                   {id: 100, invoice_id: 10, result: "success"},
+                                               ])
+
+    sales_engine.create_invoice_item_repository([
+                                                    {id: 1000, invoice_id: 10, unit_price: 7000, quantity: 2}
+                                                ])
+
+    merchant = Merchant.new({id: 2}, sales_engine)
+
+    revenue = merchant.revenue
+
+    assert_equal 140.00, revenue
+  end
+end

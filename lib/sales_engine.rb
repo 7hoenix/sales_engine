@@ -128,4 +128,16 @@ class SalesEngine
     invoice_repository.find_all_by_customer_id(customer_id)
   end
 
+
+  # business intelligence
+
+  def find_revenue_for_merchant(merchant_id)
+    invoices = invoice_repository.find_all_by_merchant_id(merchant_id)
+    transactions = invoices.map { |invoice| invoice.transactions }
+    successful_transactions = transactions.select { |transaction| transaction.result == "success" }
+
+    invoice_items = invoices.map { |invoice| invoice.invoice_items }
+    
+  end
+
 end
