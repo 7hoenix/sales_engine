@@ -32,5 +32,12 @@ class Merchant
   def invoices
     merchant_repository.find_invoices_for_merchant(id)
   end
+
+
+  # business intelligenceeeee
+
+  def revenue
+    merchant_repository.find_revenue_for_merchant(id)
+  end
 end
 
