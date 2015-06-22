@@ -104,22 +104,22 @@ end
 
   def test_it_finds_the_first_item_by_created_at
 
-    time3 = Time.new - 3
-    time5 = Time.new - 5
-    time7 = Time.new - 7
+    date1 = "Tue, 20 Mar 2012"
+    date2 = "Tue, 19 Mar 2012"
+    date3 = "Tue, 18 Mar 2012"
 
     sales_engine = "MY ENGINE"
     hashes = [
-        {id: 1, created_at: (time3)},
-        {id: 2, created_at: (time5)},
-        {id: 3, created_at: (time7)},]
+        {id: 1, created_at: (date1)},
+        {id: 2, created_at: (date2)},
+        {id: 3, created_at: (date3)},]
     repo = ItemRepository.new(hashes, sales_engine)
 
-    first_created_at = repo.find_by_created_at(time5)
+    first_created_at = repo.find_by_created_at(Date.parse(date2))
 
     assert_equal [2], [first_created_at.id]
 
-    second_created_at = repo.find_by_created_at(time7)
+    second_created_at = repo.find_by_created_at(Date.parse(date3))
     assert_equal [3], [second_created_at.id]
 
     # tv = repo.find_item_by_name("TV")
@@ -129,22 +129,22 @@ end
 
   def test_it_finds_the_first_item_by_updated_at
 
-    time3 = Time.new - 3
-    time5 = Time.new - 5
-    time7 = Time.new - 7
+    date1 = "Tue, 20 Mar 2012"
+    date2 = "Tue, 19 Mar 2012"
+    date3 = "Tue, 18 Mar 2012"
 
     sales_engine = "MY ENGINE"
     hashes = [
-        {id: 1, updated_at: time3},
-        {id: 2, updated_at: time5},
-        {id: 3, updated_at: time7},]
+        {id: 1, updated_at: date1},
+        {id: 2, updated_at: date2},
+        {id: 3, updated_at: date3},]
     repo = ItemRepository.new(hashes, sales_engine)
 
-    first_updated_at = repo.find_by_updated_at(time3)
+    first_updated_at = repo.find_by_updated_at(Date.parse(date1))
 
     assert_equal [1], [first_updated_at.id]
 
-    second_updated_at = repo.find_by_updated_at(time5)
+    second_updated_at = repo.find_by_updated_at(Date.parse(date2))
     assert_equal [2], [second_updated_at.id]
 
     # tv = repo.find_item_by_name("TV")
@@ -241,24 +241,24 @@ def test_it_finds_all_items_by_name
 
   def test_it_finds_all_invoices_by_created_at
 
-    time3 = Time.new - 3
-    time5 = Time.new - 5
-    time7 = Time.new - 7
+    date1 = "Tue, 20 Mar 2012"
+    date2 = "Tue, 19 Mar 2012"
+    date3 = "Tue, 18 Mar 2012"
 
     sales_engine = "MY ENGINE"
     hashes = [
-        {id: 1, created_at: (time3)},
-        {id: 2, created_at: (time5)},
-        {id: 3, created_at: (time7)},
-        {id: 5, created_at: (time7)},]
+        {id: 1, created_at: (date1)},
+        {id: 2, created_at: (date2)},
+        {id: 3, created_at: (date3)},
+        {id: 5, created_at: (date3)},]
 
     repo = ItemRepository.new(hashes, sales_engine)
 
-    first_all_created_at = repo.find_all_by_created_at(time7)
+    first_all_created_at = repo.find_all_by_created_at(Date.parse(date3))
 
     assert_equal [3, 5], first_all_created_at.map { |item| item.id}
 
-    second_created_at = repo.find_all_by_created_at(time5)
+    second_created_at = repo.find_all_by_created_at(Date.parse(date2))
     assert_equal [2], second_created_at.map { |item| item.id}
 
     # tv = repo.find_item_by_name("TV")
@@ -268,22 +268,22 @@ def test_it_finds_all_items_by_name
 
   def test_it_finds_all_invoices_by_updated_at
 
-    time3 = Time.new - 3
-    time5 = Time.new - 5
-    time7 = Time.new - 7
+    date1 = "Tue, 20 Mar 2012"
+    date2 = "Tue, 19 Mar 2012"
+    date3 = "Tue, 18 Mar 2012"
 
     sales_engine = "MY ENGINE"
     hashes = [
-        {id: 1, updated_at: time3},
-        {id: 2, updated_at: time5},
-        {id: 3, updated_at: time7},]
+        {id: 1, updated_at: date1},
+        {id: 2, updated_at: date2},
+        {id: 3, updated_at: date3},]
     repo = ItemRepository.new(hashes, sales_engine)
 
-    first_updated_at = repo.find_by_updated_at(time3)
+    first_updated_at = repo.find_by_updated_at(Date.parse(date1))
 
     assert_equal [1], [first_updated_at.id]
 
-    second_updated_at = repo.find_by_updated_at(time5)
+    second_updated_at = repo.find_by_updated_at(Date.parse(date2))
     assert_equal [2], [second_updated_at.id]
 
     # tv = repo.find_item_by_name("TV")

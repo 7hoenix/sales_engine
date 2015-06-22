@@ -114,72 +114,86 @@ class CustomerRepositoryTest < Minitest::Test
 
   def test_it_finds_the_first_example_of_item_by_created_at
     sales_engine = "MY ENGINE"
-    t = Time.now
+
+    date1 = "Tue, 20 Mar 2012"
+    date2 = "Tue, 19 Mar 2012"
+    date3 = "Tue, 18 Mar 2012"
+
     customer_data = [
-        {id: 1, created_at: (t)},
-        {id: 2, created_at: (t - 5)},
-        {id: 3, created_at: (t - 7)},]
+        {id: 1, created_at: date1},
+        {id: 2, created_at: date2},
+        {id: 3, created_at: date3},]
     customer_repository = CustomerRepository.new(customer_data, sales_engine)
 
-    first_created_at = customer_repository.find_by_created_at(t - 5)
+    first_created_at = customer_repository.find_by_created_at(Date.parse(date2))
 
     assert_equal [2], [first_created_at.id]
 
-    second_created_at = customer_repository.find_by_created_at(t - 7)
+    second_created_at = customer_repository.find_by_created_at(Date.parse(date3))
     assert_equal [3], [second_created_at.id]
 
   end
 
   def test_it_finds_the_first_example_of_customer_by_updated_at
     sales_engine = "MY ENGINE"
-    t = Time.now
+
+    date1 = "Tue, 20 Mar 2012"
+    date2 = "Tue, 19 Mar 2012"
+    date3 = "Tue, 18 Mar 2012"
+
     customer_data = [
-        {id: 1, updated_at: t - 3},
-        {id: 2, updated_at: t - 5},
-        {id: 3, updated_at: t - 7},]
+        {id: 1, updated_at: date1},
+        {id: 2, updated_at: date2},
+        {id: 3, updated_at: date3},]
     customer_repository = CustomerRepository.new(customer_data, sales_engine)
 
-    first_updated_at = customer_repository.find_by_updated_at(t - 3)
+    first_updated_at = customer_repository.find_by_updated_at(Date.parse(date1))
 
     assert_equal [1], [first_updated_at.id]
 
-    second_updated_at = customer_repository.find_by_updated_at(t - 5)
+    second_updated_at = customer_repository.find_by_updated_at(Date.parse(date2))
     assert_equal [2], [second_updated_at.id]
 
   end
 
  def test_it_finds_all_examples_of_item_by_created_at
     sales_engine = "MY ENGINE"
-    t = Time.now
+
+    date1 = "Tue, 20 Mar 2012"
+    date2 = "Tue, 19 Mar 2012"
+
     customer_data = [
-        {id: 1, created_at: (t)},
-        {id: 2, created_at: (t - 5)},
-        {id: 3, created_at: (t)},]
+        {id: 1, created_at: date1},
+        {id: 2, created_at: date2},
+        {id: 3, created_at: date1},]
     customer_repository = CustomerRepository.new(customer_data, sales_engine)
 
-    customers = customer_repository.find_all_by_created_at(t - 5)
+    customers = customer_repository.find_all_by_created_at(Date.parse(date2))
 
     assert_equal [2], customers.map { |customer| customer.id }
 
-    customers = customer_repository.find_all_by_created_at(t)
+    customers = customer_repository.find_all_by_created_at(Date.parse(date1))
     assert_equal [1, 3], customers.map { |customer| customer.id }
 
   end
 
   def test_it_finds_all_examples_of_customer_by_updated_at
     sales_engine = "MY ENGINE"
-    t = Time.now
+
+    date1 = "Tue, 20 Mar 2012"
+    date2 = "Tue, 19 Mar 2012"
+
     customer_data = [
-        {id: 1, updated_at: t},
-        {id: 2, updated_at: t - 5},
-        {id: 3, updated_at: t},]
+        {id: 1, updated_at: date1},
+        {id: 2, updated_at: date2},
+        {id: 3, updated_at: date1},]
     customer_repository = CustomerRepository.new(customer_data, sales_engine)
 
-    customers = customer_repository.find_all_by_updated_at(t - 5)
+    customers = customer_repository.find_all_by_updated_at(Date.parse(date2))
 
     assert_equal [2], customers.map { |customer| customer.id}
 
-    customers = customer_repository.find_all_by_updated_at(t)
+    customers = customer_repository.find_all_by_updated_at(Date.parse(date1))
     assert_equal [1, 3], customers.map { |customer| customer.id }
 
   end
