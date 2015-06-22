@@ -289,5 +289,5 @@ class TransactionRepositoryTest < Minitest::Test
     assert repo.random
 
   end
-  
+
 end
