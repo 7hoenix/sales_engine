@@ -30,11 +30,11 @@ class InvoiceItem
   end
 
   def created_at
-    invoice_item_data[:created_at]
+    Date.parse(invoice_item_data[:created_at])
   end
 
   def updated_at
-    invoice_item_data[:updated_at]
+    Date.parse(invoice_item_data[:updated_at])
   end
 
   # relationships

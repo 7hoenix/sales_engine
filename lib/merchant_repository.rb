@@ -64,8 +64,8 @@ class MerchantRepository
 
   # business intelligence
 
-  def find_revenue_for_merchant(merchant_id)
-    sales_engine.find_revenue_for_merchant(merchant_id)
+  def find_revenue_for_merchant(merchant_id, date)
+    sales_engine.find_revenue_for_merchant(merchant_id, date)
   end
 
   # spec harness
