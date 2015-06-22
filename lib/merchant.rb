@@ -40,4 +40,3 @@ class Merchant
     merchant_repository.find_revenue_for_merchant(id)
   end
 end
-
