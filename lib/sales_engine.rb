@@ -130,14 +130,19 @@ class SalesEngine
 
 
   # business intelligence
-
+  # merchant revenue
   def find_revenue_for_merchant(merchant_id)
-    invoices = invoice_repository.find_all_by_merchant_id(merchant_id)
-    transactions = invoices.map { |invoice| invoice.transactions }
-    successful_transactions = transactions.select { |transaction| transaction.result == "success" }
+    merchant = get_merchant(merchant_id)
+    invoices = merchant.invoices
+    transactions = invoices.flat_map { |invoice| invoice.transactions }
+    good_invoices = transactions.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
+    good_invoice_items = good_invoices.compact.flat_map { |invoice| invoice.invoice_items }
+    revenue = good_invoice_items.flat_map { |invoice_item| invoice_item.quantity * invoice_item.unit_price }
+    revenue.reduce(:+)
+  end
 
-    invoice_items = invoices.map { |invoice| invoice.invoice_items }
-    
+  def get_merchant(merchant_id)
+    merchant_repository.find_by_id(merchant_id)
   end
 
 end

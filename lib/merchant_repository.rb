@@ -61,6 +61,7 @@ class MerchantRepository
     sales_engine.find_invoices_for_merchant(merchant_id)
   end
 
+
   # business intelligence
 
   def find_revenue_for_merchant(merchant_id)
