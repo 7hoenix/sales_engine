@@ -68,6 +68,10 @@ class MerchantRepository
     sales_engine.find_revenue_for_merchant(merchant_id, date)
   end
 
+  def find_favorite_customer_for_merchant(merchant_id)
+    sales_engine.find_favorite_customer_for_merchant(merchant_id)
+  end
+
   # spec harness
   def inspect
     "#<#{self.class} #{@merchants.size} rows>"

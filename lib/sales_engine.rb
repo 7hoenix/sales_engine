@@ -149,4 +149,16 @@ class SalesEngine
     merchant_repository.find_by_id(merchant_id)
   end
 
+  # best customer
+  def find_favorite_customer_for_merchant(merchant_id)
+    merchant = get_merchant(merchant_id)
+    invoices = merchant.invoices
+    transactions = invoices.flat_map { |invoice| invoice.transactions }
+    good_invoices = transactions.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
+    good_customers = good_invoices.compact.flat_map { |invoice| invoice.customer }
+    customers_grouped = good_customers.group_by { |customer| customer.id }
+    best_customer_list = customers_grouped.sort_by { |customer| customer[1].size }
+    customer_repository.find_by_id(best_customer_list.last[0])
+  end
+
 end
