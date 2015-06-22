@@ -40,4 +40,8 @@ class Merchant
     merchant_repository.find_revenue_for_merchant(id, date)
   end
 
+  def favorite_customer
+    merchant_repository.find_favorite_customer_for_merchant(id)
+  end
+
 end
