@@ -106,7 +106,7 @@ class SalesEngine
     item_repository.find_by_id(item_id)
   end
 
-#   item
+  #   item
 
   def find_invoice_items_by_item_id(item_id)
     invoice_item_repository.find_all_by_item_id(item_id)
@@ -122,7 +122,7 @@ class SalesEngine
     invoice_repository.find_by_id(invoice_id)
   end
 
-#   customer
+  #   customer
 
   def find_invoices_for_customer(customer_id)
     invoice_repository.find_all_by_customer_id(customer_id)
@@ -131,11 +131,15 @@ class SalesEngine
 
   # business intelligence
   # merchant revenue
-  def find_revenue_for_merchant(merchant_id)
+  def find_revenue_for_merchant(merchant_id, date)
     merchant = get_merchant(merchant_id)
     invoices = merchant.invoices
-    transactions = invoices.flat_map { |invoice| invoice.transactions }
-    good_invoices = transactions.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
+    if date == nil
+      transactions = invoices.flat_map { |invoice| invoice.transactions }
+    else
+      transactions = invoices.flat_map { |invoice| invoice.transactions if invoice.created_at == date}
+    end
+    good_invoices = transactions.compact.flat_map {|transaction| transaction.invoice if transaction.result == "success"}
     good_invoice_items = good_invoices.compact.flat_map { |invoice| invoice.invoice_items }
     revenue = good_invoice_items.flat_map { |invoice_item| invoice_item.quantity * invoice_item.unit_price }
     revenue.reduce(:+)

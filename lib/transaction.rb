@@ -27,11 +27,11 @@ class Transaction
   end
 
   def created_at
-    transaction_data[:created_at]
+    Date.parse(transaction_data[:created_at])
   end
 
   def updated_at
-    transaction_data[:updated_at]
+    Date.parse(transaction_data[:updated_at])
   end
 
   # relationships

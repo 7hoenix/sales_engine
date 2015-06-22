@@ -30,11 +30,11 @@ class Item
   end
 
   def created_at
-    item_data[:created_at]
+    Date.parse(item_data[:created_at])
   end
 
   def updated_at
-    item_data[:updated_at]
+    Date.parse(item_data[:updated_at])
   end
 
 #   relationship

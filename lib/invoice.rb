@@ -23,11 +23,11 @@ class Invoice
   end
 
   def created_at
-    invoice_data[:created_at]
+    Date.parse(invoice_data[:created_at])
   end
 
   def updated_at
-    invoice_data[:updated_at]
+    Date.parse(invoice_data[:updated_at])
   end
 
 

@@ -19,11 +19,11 @@ class Customer
   end
 
   def created_at
-    customer_data[:created_at]
+    Date.parse(customer_data[:created_at])
   end
 
   def updated_at
-    customer_data[:updated_at]
+    Date.parse(customer_data[:updated_at])
   end
 
 #   relationship

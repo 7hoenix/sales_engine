@@ -15,11 +15,11 @@ class Merchant
   end
 
   def created_at
-    merchant_data[:created_at]
+    Date.parse(merchant_data[:created_at])
   end
 
   def updated_at
-    merchant_data[:updated_at]
+    Date.parse(merchant_data[:updated_at])
   end
 
 
@@ -36,7 +36,8 @@ class Merchant
 
   # business intelligenceeeee
 
-  def revenue
-    merchant_repository.find_revenue_for_merchant(id)
+  def revenue(date=nil)
+    merchant_repository.find_revenue_for_merchant(id, date)
   end
+
 end

@@ -6,16 +6,10 @@ require 'minitest/pride'
 require_relative '../lib/sales_engine'
 
 class SalesEngineTest < Minitest::Test
+  attr_reader :sales_engine
 
-  def test_it_exists
-    engine = SalesEngine.new
-
-    assert engine
-  end
-
-  def test_revenue_method_returns_revenue_for_merchant
-
-    sales_engine = SalesEngine.new("./test/fixtures")
+  def setup
+    @sales_engine = SalesEngine.new("./test/fixtures")
 
     sales_engine.startup
 
@@ -31,6 +25,10 @@ class SalesEngineTest < Minitest::Test
     assert_equal 99, total_customers.count
     assert_equal 99, total_items.count
     assert_equal 99, total_transactions.count
+  end
+
+  def test_revenue_method_returns_revenue_for_merchant
+
 
     merchant = sales_engine.merchant_repository.find_by_name("Willms and Sons")
 
@@ -55,6 +53,31 @@ class SalesEngineTest < Minitest::Test
 
     revenue.reduce(:+)
 
+
+  end
+
+
+  def test_it_finds_total_revenue_for_a_merchant_on_a_specific_date
+    merchant = sales_engine.merchant_repository.find_by_name("Cummings-Thiel")
+
+    assert_equal "Cummings-Thiel", merchant.name
+
+    date = "2012-03-27 11:54:11 UTC"
+
+    invoices = merchant.invoices
+
+    if date == nil
+      transactions = invoices.flat_map { |invoice| invoice.transactions }
+      require 'pry'; binding.pry
+    else
+      transactions = invoices.flat_map { |invoice| invoice.transactions if invoice.created_at == date }
+      require 'pry'; binding.pry
+    end
+    good_invoices = transactions.compact.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
+    good_invoice_items = good_invoices.compact.flat_map { |invoice| invoice.invoice_items }
+    revenue = good_invoice_items.flat_map { |invoice_item| invoice_item.quantity * invoice_item.unit_price }
+    revenue.reduce(:+)
+      require 'pry'; binding.pry
 
   end
 
