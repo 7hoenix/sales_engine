@@ -46,14 +46,18 @@ class MerchantRepositoryTest < Minitest::Test
 
   def test_it_finds_the_first_example_of_merchant_by_created_at
     sales_engine = "MY ENGINE"
-    t = Time.now
+
+    date1 = "Tue, 20 Mar 2012"
+    date2 = "Tue, 19 Mar 2012"
+    date3 = "Tue, 18 Mar 2012"
+
     merchant_data = [
-        {id: 1, created_at: t},
-        {id: 2, created_at: t - 200},
-        {id: 3, created_at: t},]
+        {id: 1, created_at: date1},
+        {id: 2, created_at: date2},
+        {id: 3, created_at: date3},]
     merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    merchant = merchant_repository.find_by_created_at(t)
+    merchant = merchant_repository.find_by_created_at(Date.parse(date1))
 
     assert_equal 1, merchant.id
     # assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
@@ -62,14 +66,18 @@ class MerchantRepositoryTest < Minitest::Test
 
   def test_it_finds_all_examples_of_merchants_by_created_at
     sales_engine = "MY ENGINE"
-    t = Time.now
+
+    date1 = "Tue, 20 Mar 2012"
+    date2 = "Tue, 19 Mar 2012"
+    date3 = "Tue, 18 Mar 2012"
+
     merchant_data = [
-        {id: 1, created_at: t},
-        {id: 2, created_at: t - 200},
-        {id: 3, created_at: t},]
+        {id: 1, created_at: date1},
+        {id: 2, created_at: date2},
+        {id: 3, created_at: date1},]
     merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    merchants = merchant_repository.find_all_by_created_at(t)
+    merchants = merchant_repository.find_all_by_created_at(Date.parse(date1))
 
     assert_equal [1, 3], merchants.map { |merchant| merchant.id }
     # assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
@@ -78,14 +86,18 @@ class MerchantRepositoryTest < Minitest::Test
 
   def test_it_finds_the_first_example_of_merchant_by_updated_at
     sales_engine = "MY ENGINE"
-    t = Time.now
+
+    date1 = "Tue, 20 Mar 2012"
+    date2 = "Tue, 19 Mar 2012"
+    date3 = "Tue, 18 Mar 2012"
+
     merchant_data = [
-        {id: 1, updated_at: t},
-        {id: 2, updated_at: t - 200},
-        {id: 3, updated_at: t},]
+        {id: 1, updated_at: date1},
+        {id: 2, updated_at: date2},
+        {id: 3, updated_at: date1},]
     merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    merchant = merchant_repository.find_by_updated_at(t)
+    merchant = merchant_repository.find_by_updated_at(Date.parse(date1))
 
     assert_equal 1, merchant.id
     # assert_equal [2], yesterdays.map { |yesterday| yesterday.id }
@@ -94,14 +106,18 @@ class MerchantRepositoryTest < Minitest::Test
 
   def test_it_finds_all_examples_of_merchants_by_updated_at
     sales_engine = "MY ENGINE"
-    t = Time.now
+
+    date1 = "Tue, 20 Mar 2012"
+    date2 = "Tue, 19 Mar 2012"
+    date3 = "Tue, 18 Mar 2012"
+
     merchant_data = [
-        {id: 1, updated_at: t},
-        {id: 2, updated_at: t - 200},
-        {id: 3, updated_at: t},]
+        {id: 1, updated_at: date1},
+        {id: 2, updated_at: date2},
+        {id: 3, updated_at: date1},]
     merchant_repository = MerchantRepository.new(merchant_data, sales_engine)
 
-    merchants = merchant_repository.find_all_by_updated_at(t)
+    merchants = merchant_repository.find_all_by_updated_at(Date.parse(date1))
 
     assert_equal [1, 3], merchants.map { |merchant| merchant.id }
     # assert_equal [2], yesterdays.map { |yesterday| yesterday.id }

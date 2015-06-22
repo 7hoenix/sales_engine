@@ -1,5 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/pride'
+require_relative '../lib/sales_engine'
 require_relative '../lib/transaction_repository'
 require_relative '../lib/transaction'
 
