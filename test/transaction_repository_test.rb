@@ -6,68 +6,68 @@ class TransactionRepositoryTest < Minitest::Test
 
   def test_it_finds_the_first_transaction_by_id
     sales_engine = "MY ENGINE"
-    hashes = [
+    transaction_data = [
         {id: 1},
         {id: 2},
         {id: 3},]
-    repo = TransactionRepository.new(hashes, sales_engine)
+    transaction_repository = TransactionRepository.new(transaction_data, sales_engine)
 
-    first_transactions = repo.find_by_id(1)
-    assert_equal [1], [first_transactions.id]
+    transaction = transaction_repository.find_by_id(1)
+    assert_equal [1], [transaction.id]
 
-    second_transactions = repo.find_by_id(2)
-    assert_equal [2], [second_transactions.id]
+    transaction = transaction_repository.find_by_id(2)
+    assert_equal [2], [transaction.id]
 
   end
 
   def test_it_finds_the_first_transaction_by_invoice_id
     sales_engine = "MY ENGINE"
-    hashes = [
+    transaction_data = [
         {id: 1, invoice_id: 1},
         {id: 2, invoice_id: 2},
         {id: 3, invoice_id: 1},]
-    repo = TransactionRepository.new(hashes, sales_engine)
+    transaction_repository = TransactionRepository.new(transaction_data, sales_engine)
 
-    first_transactions = repo.find_by_invoice_id(1)
+    transaction = transaction_repository.find_by_invoice_id(1)
 
-    assert_equal [1], [first_transactions.id]
+    assert_equal [1], [transaction.id]
 
-    second_transactions = repo.find_by_invoice_id(2)
-    assert_equal [2], [second_transactions.id]
+    transaction = transaction_repository.find_by_invoice_id(2)
+    assert_equal [2], [transaction.id]
 
   end
 
   def test_it_finds_the_first_transaction_by_credit_card_number
     sales_engine = "MY ENGINE"
-    hashes = [
+    transaction_data = [
         {id: 1, credit_card_number: 5},
         {id: 2, credit_card_number: 6},
         {id: 3, credit_card_number: 5},]
-    repo = TransactionRepository.new(hashes, sales_engine)
+    transaction_repository = TransactionRepository.new(transaction_data, sales_engine)
 
-    first_transactions = repo.find_by_credit_card_number(5)
+    transaction = transaction_repository.find_by_credit_card_number(5)
 
-    assert_equal [1], [first_transactions.id]
+    assert_equal [1], [transaction.id]
 
-    second_transactions = repo.find_by_credit_card_number(6)
-    assert_equal [2], [second_transactions.id]
+    transaction = transaction_repository.find_by_credit_card_number(6)
+    assert_equal [2], [transaction.id]
 
   end
 
   def test_it_finds_the_first_transaction_by_credit_card_expiration_date
     sales_engine = "MY ENGINE"
-    hashes = [
+    transaction_data = [
         {id: 1, credit_card_expiration_date: 13635},
         {id: 2, credit_card_expiration_date: 34873},
         {id: 3, credit_card_expiration_date: 13635},]
-    repo = TransactionRepository.new(hashes, sales_engine)
+    transaction_repository = TransactionRepository.new(transaction_data, sales_engine)
 
-    first_transactions = repo.find_by_credit_card_expiration_date(13635)
+    transaction = transaction_repository.find_by_credit_card_expiration_date(13635)
 
-    assert_equal [1], [first_transactions.id]
+    assert_equal [1], [transaction.id]
 
-    second_transactions = repo.find_by_credit_card_expiration_date(34873)
-    assert_equal [2], [second_transactions.id]
+    transaction = transaction_repository.find_by_credit_card_expiration_date(34873)
+    assert_equal [2], [transaction.id]
 
   end
 
@@ -289,9 +289,5 @@ class TransactionRepositoryTest < Minitest::Test
     assert repo.random
 
   end
-
-
-
-
-
+  
 end
