@@ -22,3 +22,20 @@ You’ll be graded on each of the criteria below with a score of (1) well below 
 * Test-Driven Development: (1) disregard for testing, (2) gaps in test usage/coverage/design, (3) adequate testing, (4) exceptional use of testing
 
 * Code Quality: (1) poor factoring and understanding of MVC, (2) some gaps in code quality / application of MVC, (3) solid code quality and pushing logic down the stack, (4) exceptionally well factored code
+
+
+#fixtures not to touch:
+
+Transactions:
+98,98,4388238767124153,,failed,2012-03-27 14:54:14 UTC,2012-03-27 14:54:14 UTC
+99,99,4201682490510536,,success,2012-03-27 14:54:14 UTC,2012-03-27 14:54:14 UTC
+
+
+Invoices:
+98,19,3,shipped,2012-03-27 06:54:14 UTC,2012-03-27 06:54:14 UTC
+99,20,3,shipped,2012-03-13 12:54:14 UTC,2012-03-13 12:54:14 UTC
+
+Invoice_items:
+97,1993,98,7,69590,2012-03-27 14:54:10 UTC,2012-03-27 14:54:10 UTC
+98,205,99,7,98947,2012-03-27 14:54:10 UTC,2012-03-27 14:54:10 UTC
+99,203,86,3,99465,2012-03-27 14:54:10 UTC,2012-03-27 14:54:10 UTC
