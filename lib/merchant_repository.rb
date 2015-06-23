@@ -82,6 +82,19 @@ class MerchantRepository
     top_merchants[0..(quantity - 1)]
   end
 
+  # most items
+  def most_items(quantity)
+    top_merchants = merchants.sort_by do |merchant|
+      invoices = merchant.invoices
+      transactions = invoices.flat_map { |invoice| invoice.transactions }
+      good_invoices = transactions.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
+      invoice_items = good_invoices.compact.flat_map { |invoice| invoice.invoice_items.count }
+      invoice_items.reduce(:+)
+    end
+    .reverse!
+    top_merchants[0..(quantity - 1)]
+  end
+
   # spec harness
   def inspect
     "#<#{self.class} #{@merchants.size} rows>"
