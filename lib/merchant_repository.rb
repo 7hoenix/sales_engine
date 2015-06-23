@@ -72,6 +72,16 @@ class MerchantRepository
     sales_engine.find_favorite_customer_for_merchant(merchant_id)
   end
 
+  def find_customers_with_pending_invoices_for_merchant(merchant_id)
+    sales_engine.find_customers_with_pending_invoices_for_merchant(merchant_id)
+  end
+
+  # most revenue
+  def most_revenue(quantity)
+    top_merchants = merchants.sort_by { |merchant| merchant.revenue }.reverse!
+    top_merchants[0..(quantity - 1)]
+  end
+
   # spec harness
   def inspect
     "#<#{self.class} #{@merchants.size} rows>"
