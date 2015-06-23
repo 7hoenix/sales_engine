@@ -54,7 +54,7 @@ class MerchantRepository
   # relationships
 
   def find_items_for_merchant(merchant_id)
-      sales_engine.find_items_for_merchant(merchant_id)
+    sales_engine.find_items_for_merchant(merchant_id)
   end
 
   def find_invoices_for_merchant(merchant_id)
@@ -91,8 +91,14 @@ class MerchantRepository
       invoice_items = good_invoices.compact.flat_map { |invoice| invoice.invoice_items.count }
       invoice_items.reduce(:+)
     end
-    .reverse!
+                        .reverse!
     top_merchants[0..(quantity - 1)]
+  end
+
+  # revenue by date
+  def revenue(date)
+    merchant_revenue = merchants.flat_map { |merchant| merchant.revenue(date) }
+    merchant_revenue.compact.reduce(:+)
   end
 
   # spec harness
