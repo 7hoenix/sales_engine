@@ -153,10 +153,10 @@ class MerchantRepositoryTest < Minitest::Test
     sales_engine = SalesEngine.new
 
     merchant_repository = sales_engine.create_merchant_repository([
-                                                {id: 1},
-                                                {id: 2},
-                                                {id: 3},
-                                            ])
+                                                                      {id: 1},
+                                                                      {id: 2},
+                                                                      {id: 3},
+                                                                  ])
     sales_engine.create_invoice_repository([
                                                {id: 10, merchant_id: 1},
                                                {id: 20, merchant_id: 2},
@@ -178,5 +178,70 @@ class MerchantRepositoryTest < Minitest::Test
 
   end
 
+  def test_it_returns_the_top_x_merchants_ranked_in_order_of_items_sold
+    # go through each merchant and find the total number of items sold
+    # return the top x number of merchants
+    # need: merchant, invoice, invoice item, transaction
+    sales_engine = SalesEngine.new
 
+    merchant_repository = sales_engine.create_merchant_repository([
+                                                                      {id: 1},
+                                                                      {id: 2},
+                                                                      {id: 3},
+                                                                  ])
+    sales_engine.create_invoice_repository([
+                                               {id: 10, merchant_id: 1},
+                                               {id: 20, merchant_id: 2},
+                                               {id: 30, merchant_id: 3},
+                                           ])
+
+    sales_engine.create_transaction_repository([
+                                                   {id: 100, invoice_id: 10, result: "success"},
+                                                   {id: 200, invoice_id: 20, result: "success"},
+                                                   {id: 300, invoice_id: 30, result: "success"},
+                                               ])
+    sales_engine.create_invoice_item_repository([
+                                                    {id: 1000, invoice_id: 10, item_id: 10_000},
+                                                    {id: 1001, invoice_id: 10, item_id: 10_001},
+                                                    {id: 1002, invoice_id: 10, item_id: 10_002},
+                                                    {id: 1003, invoice_id: 20, item_id: 10_003},
+                                                    {id: 1004, invoice_id: 20, item_id: 10_004},
+                                                    {id: 1005, invoice_id: 30, item_id: 10_005},
+                                                ])
+    top_merchants = merchant_repository.most_items(2)
+    assert_equal [1, 2], top_merchants.map { |merchant| merchant.id }
+  end
+
+  def test_it_returns_the_total_revenue_for_a_date_across_all_merchants
+   skip
+    sales_engine = SalesEngine.new
+
+
+    date = "2012-03-27 11:54:11 UTC"
+    date2 = "2012-03-26 11:54:11 UTC"
+
+    merchant_repository = sales_engine.create_merchant_repository([
+                                                                      {id: 1},
+                                                                      {id: 2},
+                                                                      {id: 3},
+                                                                  ])
+    sales_engine.create_invoice_repository([
+                                               {id: 10, merchant_id: 1, created_at: date},
+                                               {id: 20, merchant_id: 2, created_at: date},
+                                               {id: 30, merchant_id: 3, created_at: date2},
+                                           ])
+
+    sales_engine.create_transaction_repository([
+                                                   {id: 100, invoice_id: 10, result: "success"},
+                                                   {id: 200, invoice_id: 20, result: "success"},
+                                                   {id: 300, invoice_id: 30, result: "success"},
+                                               ])
+    sales_engine.create_invoice_item_repository([
+                                                    {id: 1000, invoice_id: 10, quantity: 1, unit_price: 7700},
+                                                    {id: 2000, invoice_id: 20, quantity: 1, unit_price: 7800},
+                                                    {id: 3000, invoice_id: 30, quantity: 1, unit_price: 7900},
+                                                ])
+
+    assert_equal BigDecimal.new(157), merchant_repository.revenue(date)
+  end
 end
