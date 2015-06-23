@@ -213,12 +213,11 @@ class MerchantRepositoryTest < Minitest::Test
   end
 
   def test_it_returns_the_total_revenue_for_a_date_across_all_merchants
-   skip
     sales_engine = SalesEngine.new
 
 
-    date = "2012-03-27 11:54:11 UTC"
-    date2 = "2012-03-26 11:54:11 UTC"
+    date = "Tue, 20 Mar 2012"
+    date2 = "Wed, 21 Mar 2012"
 
     merchant_repository = sales_engine.create_merchant_repository([
                                                                       {id: 1},
@@ -242,6 +241,6 @@ class MerchantRepositoryTest < Minitest::Test
                                                     {id: 3000, invoice_id: 30, quantity: 1, unit_price: 7900},
                                                 ])
 
-    assert_equal BigDecimal.new(157), merchant_repository.revenue(date)
+    assert_equal BigDecimal.new(155), merchant_repository.revenue(Date.parse(date))
   end
 end
