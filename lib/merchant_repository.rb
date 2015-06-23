@@ -87,7 +87,7 @@ class MerchantRepository
     top_merchants = merchants.sort_by do |merchant|
       invoices = merchant.invoices
       transactions = invoices.flat_map { |invoice| invoice.transactions }
-      good_invoices = transactions.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
+      good_invoices ||= transactions.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
       invoice_items = good_invoices.compact.flat_map { |invoice| invoice.invoice_items.count }
       invoice_items.reduce(:+)
     end

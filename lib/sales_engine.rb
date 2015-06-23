@@ -139,7 +139,7 @@ class SalesEngine
     else
       transactions = invoices.flat_map { |invoice| invoice.transactions if invoice.created_at == date}
     end
-    good_invoices = transactions.compact.flat_map {|transaction| transaction.invoice if transaction.result == "success"}
+    good_invoices ||= transactions.compact.flat_map {|transaction| transaction.invoice if transaction.result == "success"}
     good_invoice_items = good_invoices.compact.flat_map { |invoice| invoice.invoice_items }
     revenue = good_invoice_items.flat_map { |invoice_item| invoice_item.quantity * invoice_item.unit_price }
     revenue.reduce(:+)
@@ -154,7 +154,7 @@ class SalesEngine
     merchant = get_merchant(merchant_id)
     invoices = merchant.invoices
     transactions = invoices.flat_map { |invoice| invoice.transactions }
-    good_invoices = transactions.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
+    good_invoices ||= transactions.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
     good_customers = good_invoices.compact.flat_map { |invoice| invoice.customer }
     customers_grouped = good_customers.group_by { |customer| customer.id }
     best_customer_list = customers_grouped.sort_by { |customer| customer[1].size }
