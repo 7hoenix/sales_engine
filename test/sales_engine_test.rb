@@ -92,7 +92,29 @@ class SalesEngineTest < Minitest::Test
 
     sales_engine.customer_repository.find_by_id(best_customer_list.last[0])
 
+    assert_equal 19, merchant.favorite_customer.id
+
   end
 
+  def test_it_returns_a_collection_of_customers_with_pending_invoices
+    skip
+    merchant = sales_engine.merchant_repository.find_by_name("Bosco, Howe and Davis")
+
+    invoices = merchant.invoices
+
+    transactions = invoices.flat_map { |invoice | invoice.transactions }
+    bad_invoices = transactions.flat_map { |transaction| transaction.invoice if transaction.result == "failed" }
+    potentially_not_bad_invoices = bad_invoices.compact.flat_map do |id|
+      sales_engine.transaction_repository.find_all_by_invoice_id(id)
+    end
+
+    bad_invoices_for_realsies = bad_invoices - potentially_not_bad_invoices
+
+    # 93 is our expected invoice failure. . . thats all.
+    assert_equal "Helmer", pending_customers[0].first_name
+
+    assert_equal "Helmer", merchant.customers_with_pending_invoices
+
+  end
 
 end

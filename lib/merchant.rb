@@ -44,4 +44,8 @@ class Merchant
     merchant_repository.find_favorite_customer_for_merchant(id)
   end
 
+  def customers_with_pending_invoices
+    merchant_repository.find_customers_with_pending_invoices_for_merchant(id)
+  end
+
 end

@@ -161,4 +161,24 @@ class SalesEngine
     customer_repository.find_by_id(best_customer_list.last[0])
   end
 
+  # customers with pending invoices
+  def find_customers_with_pending_invoices_for_merchant(merchant_id)
+    merchant = get_merchant(merchant_id)
+    invoices = merchant.invoices
+    pending_invoices = invoices.select do |invoice|
+      successful = invoice.transactions.any? {|transaction| transaction.result == "success" }
+      invoice if !successful
+    end
+    pending_invoices.map { |invoice| invoice.customer }
+
+    # For each invoice, check if there's a successful transaction
+    # If so, ignore them
+    # If there are no successful transactions
+    # add invoice to collection
+    # find customer associated with that invoice and
+    # add it to a collection of pending customers
+
+  end
+
+
 end

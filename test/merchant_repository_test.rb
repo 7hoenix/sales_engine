@@ -3,8 +3,10 @@ SimpleCov.start
 
 require 'minitest/autorun'
 require 'minitest/pride'
+require_relative '../lib/sales_engine'
 require_relative '../lib/merchant_repository'
 require_relative '../lib/merchant'
+require 'bigdecimal'
 
 class MerchantRepositoryTest < Minitest::Test
   def test_it_finds_the_first_example_of_merchant_by_name
@@ -145,6 +147,35 @@ class MerchantRepositoryTest < Minitest::Test
     merchant = merchant_repository.find_by_id(id)
 
     assert_equal 2, merchant.id
+  end
+
+  def test_it_returns_the_top_x_merchants_ranked_in_order_of_total_revenue
+    sales_engine = SalesEngine.new
+
+    merchant_repository = sales_engine.create_merchant_repository([
+                                                {id: 1},
+                                                {id: 2},
+                                                {id: 3},
+                                            ])
+    sales_engine.create_invoice_repository([
+                                               {id: 10, merchant_id: 1},
+                                               {id: 20, merchant_id: 2},
+                                               {id: 30, merchant_id: 3},
+                                           ])
+
+    sales_engine.create_transaction_repository([
+                                                   {id: 100, invoice_id: 10, result: "success"},
+                                                   {id: 200, invoice_id: 20, result: "success"},
+                                                   {id: 300, invoice_id: 30, result: "success"},
+                                               ])
+    sales_engine.create_invoice_item_repository([
+                                                    {id: 1000, invoice_id: 10, quantity: 1, unit_price: 7700},
+                                                    {id: 2000, invoice_id: 20, quantity: 1, unit_price: 7800},
+                                                    {id: 3000, invoice_id: 30, quantity: 1, unit_price: 7900},
+                                                ])
+    top_merchants = merchant_repository.most_revenue(2)
+    assert_equal [BigDecimal.new(79), BigDecimal.new(78)], top_merchants.map { |merchant| merchant.revenue }
+
   end
 
 
