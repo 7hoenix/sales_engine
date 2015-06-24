@@ -63,7 +63,6 @@ class CustomerTest < Minitest::Test
   end
 
   def test_it_returns_an_instance_of_merchant_where_the_customer_has_conducted_the_most_successful_transactions
-    skip
     sales_engine = SalesEngine.new
 
     customer_repository = sales_engine.create_customer_repository([
@@ -86,9 +85,9 @@ class CustomerTest < Minitest::Test
                                                    {id: 1006, invoice_id: 103, result: "success"},
                                                ])
     sales_engine.create_merchant_repository([
-                                                {id: 10, invoice_id: 101},
-                                                {id: 11, invoice_id: 102},
-                                                {id: 12, invoice_id: 103},
+                                                {id: 10},
+                                                {id: 11},
+                                                {id: 12},
                                             ])
     current_customer = customer_repository.find_by_id(1)
     favorite_merchant = current_customer.favorite_merchant
