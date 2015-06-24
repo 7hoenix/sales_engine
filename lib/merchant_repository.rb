@@ -78,8 +78,37 @@ class MerchantRepository
 
   # most revenue
   def most_revenue(quantity)
-    top_merchants = merchants.sort_by { |merchant| merchant.revenue }.reverse!
-    top_merchants[0..(quantity - 1)]
+
+      successful_transactions_by_invoice_id = sales_engine.transaction_repository
+      .find_all_by_result('success')
+      .group_by { |txn| txn.invoice_id }
+
+      successful_invoices = sales_engine.invoice_repository.all.select { |invoice|
+       successful_transactions_by_invoice_id[invoice.id]
+        }
+      invoices_by_merchant_id = successful_invoices.group_by { |invoice| invoice.merchant_id }
+
+      invoice_items_by_invoice_id = sales_engine.invoice_item_repository.all.group_by { |ii| ii.invoice_id }
+
+      invoice_items_by_merchant_id = invoices_by_merchant_id.map { |merchant_id, invoices|
+      invoice_items = invoices.flat_map { |invoice| invoice_items_by_invoice_id.fetch(invoice.id, []) }
+       [merchant_id, invoice_items]
+       }.to_h
+
+       merchants_by_revenue = merchants.map { |merchant|
+      revenue = invoice_items_by_merchant_id[merchant.id].reduce(0) do |sum, ii|
+        sum + (ii.quantity * ii.unit_price)
+
+        end
+        [merchant, revenue]
+        }
+       merchants_by_revenue.sort_by { |merchant, revenue| revenue }.last(quantity)
+      .map { |merchant, revenue| merchant }
+      .reverse
+
+    #
+    # top_merchants = merchants.sort_by { |merchant| merchant.revenue }.reverse!
+    # top_merchants[0..(quantity - 1)]
   end
 
   # most items
