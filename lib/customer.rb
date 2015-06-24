@@ -26,10 +26,18 @@ class Customer
     Date.parse(customer_data[:updated_at])
   end
 
-#   relationship
+  # relationship
 
   def invoices
     customer_repository.find_invoices_for_customer(id)
+  end
+
+  # business intelligance
+
+  def transactions
+    current_customer = customer_repository.find_by_id(id)
+    customer_invoices = current_customer.invoices
+    customer_invoices.flat_map { |invoice| invoice.transactions }
   end
 
 end
