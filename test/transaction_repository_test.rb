@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require 'minitest/pride'
+require_relative '../lib/sales_engine'
 require_relative '../lib/transaction_repository'
+require_relative '../lib/transaction'
 
 class TransactionRepositoryTest < Minitest::Test
 
@@ -288,6 +290,21 @@ class TransactionRepositoryTest < Minitest::Test
 
     assert repo.random
 
+  end
+
+  def test_it_creates_a_new_transaction
+    sales_engine = SalesEngine.new
+
+    transaction_repository = sales_engine.create_transaction_repository([
+                                                                            {id: 1, invoice_id: 11},
+                                                                            {id: 2, invoice_id: 12},
+                                                                        ])
+    new_transaction_data = {id: 13, invoice_id: 3, credit_card_number: 4444333322221111, credit_card_expiration: 10/13,
+                            result: "success", created_at: Time.new.to_s, updated_at: Time.new.to_s }
+
+    transaction_repository.create_new_transaction(new_transaction_data)
+
+    assert_equal 13, transaction_repository.all.last.id
   end
 
 end

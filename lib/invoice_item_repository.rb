@@ -91,6 +91,19 @@ class InvoiceItemRepository
     sales_engine.find_item_by_item_id_for_invoice_item(item_id)
   end
 
+  # business intelligence
+
+  def create_invoice_items(invoice_id, quantities)
+    quantities.each do |quantity|
+      id = sales_engine.invoice_item_repository.all.last.id + 1
+      unit_price = sales_engine.item_repository.find_by_id(quantity[0]).unit_price.to_s
+      created_at = Date.new
+      updated_at = Date.new
+      new_invoice_item_data = {id: id, item_id: quantity[0], invoice_id: invoice_id, quantity: quantity[1], unit_price: unit_price}
+      invoice_items << InvoiceItem.new(new_invoice_item_data, self)
+    end
+    invoice_items.last(quantities.size)
+  end
 
   # spec harness
   def inspect

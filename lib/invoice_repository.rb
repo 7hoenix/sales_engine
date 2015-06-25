@@ -1,3 +1,5 @@
+require 'date'
+
 class InvoiceRepository
   attr_reader :sales_engine, :invoice_data, :invoices
 
@@ -91,6 +93,31 @@ class InvoiceRepository
 
   def find_merchant_by_merchant_id_for_invoice(merchant_id)
     sales_engine.find_merchant_by_merchant_id_for_invoice(merchant_id)
+  end
+
+  # business intelligencia
+
+  def create(invoice_inputs)
+    id = sales_engine.invoice_repository.all.last.id + 1
+    current_customer_id = invoice_inputs[:customer].id
+    current_merchant_id = invoice_inputs[:merchant].id
+    current_status = invoice_inputs[:status]
+    created_at = Time.new.to_s
+    updated_at = Time.new.to_s
+
+    new_invoice_data = {id: id, customer_id: current_customer_id, merchant_id: current_merchant_id,
+                        status: current_status, created_at: created_at, updated_at: updated_at}
+    invoices << Invoice.new(new_invoice_data, self)
+
+    items = invoice_inputs[:items]
+    items_by_id = items.group_by { |item| item.id }
+    quantities = items_by_id.map { |key, value| [key, value.count] }
+
+    sales_engine.invoice_item_repository.create_invoice_items(
+        id, quantities)
+
+    invoices.last
+
   end
 
   # spec harness

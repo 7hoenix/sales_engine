@@ -140,5 +140,26 @@ class InvoiceTest < Minitest::Test
 
     assert_equal 60, merchant.id
   end
+
+  def test_it_charges_the_credit_card
+    sales_engine = SalesEngine.new
+
+    invoice_repository = sales_engine.create_invoice_repository([
+                                                                    {id: 1},
+                                                                    {id: 2},
+                                                                    {id: 3},
+                                                                ])
+    transaction_repository = sales_engine.create_transaction_repository([
+                                                   {id: 11, invoice_id: 1},
+                                                   {id: 12, invoice_id: 2},
+                                               ])
+
+    invoice = invoice_repository.find_by_id(3)
+    invoice.charge(credit_card_number: 4444333322221111, credit_card_expiration: 10/13, result: "success" )
+
+    new_transaction = transaction_repository.find_by_id(13)
+
+    assert 13, new_transaction.id
+  end
   
 end

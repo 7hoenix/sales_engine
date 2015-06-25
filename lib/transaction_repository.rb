@@ -86,6 +86,12 @@ class TransactionRepository
     sales_engine.find_invoice_by_transaction_id(invoice_id)
   end
 
+  # business intelligence
+
+  def create_new_transaction(new_transaction_data)
+    transactions << Transaction.new(new_transaction_data, self)
+  end
+
 
   # spec harness
   def inspect

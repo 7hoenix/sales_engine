@@ -203,6 +203,41 @@ class InvoiceItemRepositoryTest < Minitest::Test
     # assert_equal [], [tv.id]
   end
 
+  def test_it_creates_a_new_invoice_item
+    sales_engine = SalesEngine.new
 
+    sales_engine.create_item_repository([
+                                            {id: 10001, unit_price: 7700},
+                                            {id: 10002, unit_price: 7800},
+                                            {id: 10003, unit_price: 7900},
+                                            {id: 10004, unit_price: 8000},
+                                            {id: 10005, unit_price: 8100},
+                                        ])
+
+    invoice_item_repository = sales_engine.create_invoice_item_repository([
+                                                                              {id: 1001, invoice_id: 101, item_id: 10001, quantity: 1},
+                                                                              {id: 1002, invoice_id: 102, item_id: 10002, quantity: 2},
+                                                                              {id: 1003, invoice_id: 103, item_id: 10003, quantity: 3},
+                                                                              {id: 1004, invoice_id: 104, item_id: 10004, quantity: 2},
+                                                                              {id: 1005, invoice_id: 105, item_id: 10005, quantity: 1},
+                                                                          ])
+
+    invoice_repository = sales_engine.create_invoice_repository([
+                                                                    {id: 101, customer_id: 11, merchant_id: 1, status: "shipped"},
+                                                                    {id: 102, customer_id: 12, merchant_id: 2, status: "shipped"},
+                                                                    {id: 103, customer_id: 13, merchant_id: 3, status: "shipped"},
+                                                                    {id: 104, customer_id: 14, merchant_id: 4, status: "shipped"},
+                                                                    {id: 105, customer_id: 15, merchant_id: 5, status: "shipped"},
+                                                                    {id: 106, customer_id: 16, merchant_id: 6, status: "shipped"},
+                                                                ])
+
+    invoice_id = sales_engine.invoice_repository.find_by_id(106)
+    quantities = [[10001, 1], [10002, 1], [10003, 1]]
+
+    invoice_items = invoice_item_repository.create_invoice_items(
+        invoice_id, quantities)
+
+    assert_equal [1006, 1007, 1008], invoice_items.map {|invoice_item| invoice_item.id}
+  end
 
 end
