@@ -139,7 +139,7 @@ class SalesEngine
     else
       transactions = invoices.flat_map { |invoice| invoice.transactions if invoice.created_at == date}
     end
-    good_invoices ||= transactions.compact.flat_map {|transaction| transaction.invoice if transaction.result == "success"}
+    good_invoices = transactions.compact.flat_map {|transaction| transaction.invoice if transaction.result == "success"}
     good_invoice_items = good_invoices.compact.flat_map { |invoice| invoice.invoice_items }
     revenue = good_invoice_items.flat_map { |invoice_item| invoice_item.quantity * invoice_item.unit_price }
     revenue.reduce(:+)

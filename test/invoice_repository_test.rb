@@ -274,4 +274,54 @@ def test_it_finds_all_invoices_by_customer_id
 
   end
 
+  def test_it_creates_a_new_invoice_given_the_necessary_inputs_from_other_classes
+
+    sales_engine = SalesEngine.new
+
+    customer_repository = sales_engine.create_customer_repository([
+                                                {id: 11},
+                                                {id: 12},
+                                            ])
+
+    merchant_repository = sales_engine.create_merchant_repository([
+                                                                      {id: 1},
+                                                                      {id: 2},
+                                                                      {id: 3},
+                                                                  ])
+
+    sales_engine.create_invoice_item_repository([
+                                                    {id: 1001, invoice_id: 101, item_id: 10001},
+                                                    {id: 1002, invoice_id: 102, item_id: 10002},
+                                                    {id: 1003, invoice_id: 103, item_id: 10003},
+                                                    {id: 1004, invoice_id: 104, item_id: 10004},
+                                                    {id: 1005, invoice_id: 105, item_id: 10005},
+                                                ])
+    item_repository = sales_engine.create_item_repository([
+                                            {id: 10001, merchant_id: 1, unit_price: 7700},
+                                            {id: 10002, merchant_id: 2, unit_price: 7800},
+                                            {id: 10003, merchant_id: 3, unit_price: 7900},
+                                            {id: 10004, merchant_id: 2, unit_price: 8000},
+                                            {id: 10005, merchant_id: 1, unit_price: 8100},
+                                        ])
+    invoice_repository = sales_engine.create_invoice_repository([
+                                        {id: 101, customer_id: 11, merchant_id: 1, status: "shipped"},
+                                        {id: 102, customer_id: 12, merchant_id: 2, status: "shipped"},
+                                        {id: 103, customer_id: 13, merchant_id: 3, status: "shipped"},
+                                        {id: 104, customer_id: 14, merchant_id: 4, status: "shipped"},
+                                        {id: 105, customer_id: 15, merchant_id: 5, status: "shipped"},
+                                    ])
+    current_customer = customer_repository.find_by_id(11)
+    current_merchant = merchant_repository.find_by_id(2)
+
+    item1 = item_repository.find_by_id(10001)
+    item2 = item_repository.find_by_id(10002)
+    item3 = item_repository.find_by_id(10003)
+
+    invoice = invoice_repository.create(customer: current_customer, merchant: current_merchant, status: "shipped",
+    items: [item1, item2, item3])
+
+    assert_equal 106, invoice_repository.all.last.id
+
+  end
+
 end

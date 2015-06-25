@@ -38,6 +38,7 @@ class Merchant
 
   def revenue(date=nil)
     merchant_repository.find_revenue_for_merchant(id, date)
+
   end
 
   def favorite_customer

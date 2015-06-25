@@ -83,6 +83,11 @@ class MerchantRepository
       .find_all_by_result('success')
       .group_by { |txn| txn.invoice_id }
 
+      # {'1' => {}}.inject({}) do |memo, (k,v)|
+      #     Invoice.find(k)
+      #   end
+      # end
+
       successful_invoices = sales_engine.invoice_repository.all.select { |invoice|
        successful_transactions_by_invoice_id[invoice.id]
         }
@@ -116,7 +121,7 @@ class MerchantRepository
     top_merchants = merchants.sort_by do |merchant|
       invoices = merchant.invoices
       transactions = invoices.flat_map { |invoice| invoice.transactions }
-      good_invoices ||= transactions.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
+      good_invoices = transactions.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
       invoice_items = good_invoices.compact.flat_map { |invoice| invoice.invoice_items.count }
       invoice_items.reduce(:+)
     end
@@ -126,7 +131,7 @@ class MerchantRepository
 
   # revenue by date
   def revenue(date)
-    merchant_revenue = merchants.flat_map { |merchant| merchant.revenue(date) }
+    merchant_revenue = merchants.compact.flat_map { |merchant| merchant.revenue(date) }
     merchant_revenue.compact.reduce(:+)
   end
 
