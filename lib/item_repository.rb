@@ -96,8 +96,8 @@ class ItemRepository
   def most_revenue(quantity)
 
     successful_transactions_by_invoice_id = sales_engine.transaction_repository
-                                                .find_all_by_result('success')
-                                                .group_by { |transaction| transaction.invoice_id }
+                            .find_all_by_result('success')
+                            .group_by { |transaction| transaction.invoice_id }
 
     successful_invoices = sales_engine.invoice_repository.all.select { |invoice|
       successful_transactions_by_invoice_id[invoice.id]
@@ -105,7 +105,8 @@ class ItemRepository
     successful_invoice_items = successful_invoices.flat_map { |invoice|
       invoice.invoice_items }
 
-    invoice_items_by_item_id = successful_invoice_items.group_by { |invoice_item| invoice_item.item_id }
+    invoice_items_by_item_id = successful_invoice_items
+                               .group_by { |invoice_item| invoice_item.item_id }
     items_by_revenue = items.map { |item|
       if invoice_items_by_item_id[item.id]
         revenue = invoice_items_by_item_id[item.id].reduce(0) do |sum, ii|
@@ -117,24 +118,12 @@ class ItemRepository
     items_by_revenue.compact.sort_by { |item, revenue| revenue }.last(quantity)
         .map { |item, revenue| item }
         .reverse
-
-    # items_by_revenue = items.map do |item|
-    #   if invoice_items_by_item_id[item.id]
-    #     revenue = invoice_items_by_item_id[item.id].reduce(0) do |sum, ii|
-    #       sum + (ii.quantity * ii.unit_price)
-    #     end
-    #     [item, revenue]
-    #   end
-    # end
-    # items_by_revenue.compact.sort_by { |item, revenue| revenue }.last(quantity)
-    #     .map { |item, revenue| item }
-    #     .reverse
   end
 
   def most_items(quantity)
     successful_transactions_by_invoice_id = sales_engine.transaction_repository
-                                                .find_all_by_result('success')
-                                                .group_by { |transaction| transaction.invoice_id }
+                              .find_all_by_result('success')
+                              .group_by { |transaction| transaction.invoice_id }
 
     successful_invoices = sales_engine.invoice_repository.all.select { |invoice|
       successful_transactions_by_invoice_id[invoice.id]
@@ -142,7 +131,8 @@ class ItemRepository
     successful_invoice_items = successful_invoices.flat_map { |invoice|
       invoice.invoice_items }
 
-    invoice_items_by_item_id = successful_invoice_items.group_by { |invoice_item| invoice_item.item_id }
+    invoice_items_by_item_id = successful_invoice_items
+                               .group_by { |invoice_item| invoice_item.item_id }
     items_by_units_sold = items.map { |item|
       if invoice_items_by_item_id[item.id]
         units_sold = invoice_items_by_item_id[item.id].reduce(0) do |sum, ii|
@@ -151,50 +141,15 @@ class ItemRepository
         [item, units_sold]
       end
     }
-    items_by_units_sold.compact.sort_by { |item, units_sold| units_sold }.last(quantity)
+    items_by_units_sold.compact
+        .sort_by { |item, units_sold| units_sold }.last(quantity)
         .map { |item, units_sold| item }
         .reverse
-    # invoice_items_by_item_id
-    # items_by_units_sold = items.map { |item|
-    #   if invoice_items_by_item_id[item.id]
-    #     units_sold = invoice_items_by_item_id[item.id].reduce(0) do |sum, ii|
-    #       sum + ii.quantity
-    #     end
-    #     [item, units_sold]
-    #   end
-    # }
-    # items_by_units_sold.compact.sort_by { |item, units_sold| units_sold }.last(quantity)
-    #     .map { |item, units_sold| item }
-    #     .reverse
   end
 
   # spec harness
   def inspect
     "#<#{self.class} #{@items.size} rows>"
-  end
-
-  private
-
-  def successful_transactions_by_invoice_id
-    sales_engine.transaction_repository
-        .find_all_by_result('success')
-        .group_by { |transaction| transaction.invoice_id }
-  end
-
-  def successful_invoices
-    sales_engine.invoice_repository.all.select { |invoice| successful_transactions_by_invoice_id[invoice.id] }
-  end
-
-  def successful_invoice_items
-    successful_invoices.flat_map { |invoice| invoice.invoice_items }
-  end
-
-  def invoice_items_by_item_id
-    successful_invoice_items.group_by { |invoice_item| invoice_item.item_id }
-  end
-
-  def items_by_revenue
-
   end
 
 end

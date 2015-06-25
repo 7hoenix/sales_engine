@@ -58,9 +58,14 @@ class Item
       invoice_item.invoice
     end
     transactions = invoices.flat_map { |invoice| invoice.transactions }
-    good_invoices = transactions.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
-    good_invoice_items = good_invoices.compact.flat_map { |invoice| invoice.invoice_items }
-    invoice_items_by_date = good_invoice_items.group_by { |invoice_item| invoice_item.invoice.created_at }
+    good_invoices = transactions
+                        .flat_map { |transaction| transaction
+                        .invoice if transaction.result == "success" }
+    good_invoice_items = good_invoices.compact
+                             .flat_map { |invoice| invoice.invoice_items }
+    invoice_items_by_date = good_invoice_items
+                                .group_by { |invoice_item| invoice_item
+                                .invoice.created_at }
     dates_with_revenue = invoice_items_by_date.map do |date, invoice_items|
          revenue = invoice_items.reduce(0) do |sum, invoice_item|
            sum + (invoice_item.quantity * invoice_item.unit_price)
@@ -68,10 +73,6 @@ class Item
          [date, revenue]
     end
     dates_with_revenue.sort_by { |date, revenue| revenue}.last[0]
-        # invoice_items_by_date.compact.sort_by { |invoice_item, revenue| revenue }
-
-    # map if successful_invoice_ invoice_items_by_id[invoice_item]
-
   end
 
   private
@@ -83,7 +84,8 @@ class Item
   end
 
   def successful_invoices
-    item_repository.sales_engine.invoice_repository.all.select { |invoice| successful_transactions_by_invoice_id[invoice.id] }
+    item_repository.sales_engine.invoice_repository.all
+        .select { |invoice| successful_transactions_by_invoice_id[invoice.id] }
   end
 
   def successful_invoice_items

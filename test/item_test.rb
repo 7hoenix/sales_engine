@@ -98,25 +98,4 @@ class ItemTest < Minitest::Test
     assert_equal Date.parse("Wed, 21 Mar 2012"), best_day
   end
 
-  def test_it_calculates_revenue_for_an_item
-    skip
-    sales_engine = SalesEngine.new
-
-    item_repository = sales_engine.create_item_repository([
-                                                              {id: 1},
-                                                              {id: 2},
-                                                              {id: 3},
-                                                          ])
-    sales_engine.create_invoice_item_repository([
-                                                    {id: 10, item_id: 1, quantity: 1, unit_price: 75},
-                                                    {id: 20, item_id: 2, quantity: 2, unit_price: 76},
-                                                    {id: 30, item_id: 3, quantity: 1, unit_price: 77},
-                                                    {id: 40, item_id: 2, quantity: 3, unit_price: 78},
-                                                    {id: 50, item_id: 1, quantity: 1, unit_price: 79},
-                                                ])
-
-    item = item_repository.find_by_id(1)
-    assert_equal BigDecimal.new(154), item.revenue
-  end
-
 end
