@@ -56,17 +56,21 @@ class Invoice
   # business intelligence
 
   def charge(transaction_inputs)
-    transaction_id = invoice_repository.sales_engine.transaction_repository.all.last.id + 1
+    transaction_id = invoice_repository.sales_engine.transaction_repository
+                         .all.last.id + 1
     current_invoice_id = id
     credit_card_number = transaction_inputs[:credit_card_number]
-    credit_card_expiration_date = transaction_inputs[:credit_card_expiration_date]
+    credit_card_exp_date = transaction_inputs[:credit_card_expiration_date]
     result = transaction_inputs[:result]
     created_at = Time.now.to_s
     updated_at = Time.now.to_s
 
-    new_transaction_data = {id: transaction_id, invoice_id: current_invoice_id, credit_card_number: credit_card_number,
-    credit_card_expiration_date: credit_card_expiration_date, result: result, created_at: created_at,
+    new_transaction_data = {id: transaction_id, invoice_id: current_invoice_id,
+                            credit_card_number: credit_card_number,
+                            credit_card_expiration_date: credit_card_exp_date,
+                            result: result, created_at: created_at,
                             updated_at: updated_at }
-    invoice_repository.sales_engine.transaction_repository.create_new_transaction(new_transaction_data)
+    invoice_repository.sales_engine.transaction_repository
+        .create_new_transaction(new_transaction_data)
   end
 end

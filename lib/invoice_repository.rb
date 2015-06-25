@@ -105,8 +105,10 @@ class InvoiceRepository
     created_at = Time.new.to_s
     updated_at = Time.new.to_s
 
-    new_invoice_data = {id: id, customer_id: current_customer_id, merchant_id: current_merchant_id,
-                        status: current_status, created_at: created_at, updated_at: updated_at}
+    new_invoice_data = {id: id, customer_id: current_customer_id,
+                        merchant_id: current_merchant_id,
+                        status: current_status, created_at: created_at,
+                        updated_at: updated_at}
     invoices << Invoice.new(new_invoice_data, self)
 
     items = invoice_inputs[:items]

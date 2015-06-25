@@ -40,7 +40,8 @@ class InvoiceItem
   # relationships
 
   def invoice
-    invoice_item_repository.find_invoice_by_invoice_id_for_invoice_item(invoice_id)
+    invoice_item_repository
+        .find_invoice_by_invoice_id_for_invoice_item(invoice_id)
   end
 
   def item

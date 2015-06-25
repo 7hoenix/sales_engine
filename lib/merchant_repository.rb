@@ -76,27 +76,29 @@ class MerchantRepository
     sales_engine.find_customers_with_pending_invoices_for_merchant(merchant_id)
   end
 
-  # most revenue
   def most_revenue(quantity)
 
-      successful_transactions_by_invoice_id = sales_engine.transaction_repository
-      .find_all_by_result('success')
-      .group_by { |txn| txn.invoice_id }
+      successful_transactions_by_invoice_id = sales_engine
+                                .transaction_repository
+                                .find_all_by_result('success')
+                                .group_by { |txn| txn.invoice_id }
 
-      # {'1' => {}}.inject({}) do |memo, (k,v)|
-      #     Invoice.find(k)
-      #   end
-      # end
-
-      successful_invoices = sales_engine.invoice_repository.all.select { |invoice|
+      successful_invoices = sales_engine.invoice_repository
+                                .all.select { |invoice|
        successful_transactions_by_invoice_id[invoice.id]
         }
-      invoices_by_merchant_id = successful_invoices.group_by { |invoice| invoice.merchant_id }
+      invoices_by_merchant_id = successful_invoices
+                                    .group_by { |invoice| invoice.merchant_id }
 
-      invoice_items_by_invoice_id = sales_engine.invoice_item_repository.all.group_by { |ii| ii.invoice_id }
+      invoice_items_by_invoice_id = sales_engine
+                                        .invoice_item_repository
+                                        .all.group_by { |ii| ii.invoice_id }
 
-      invoice_items_by_merchant_id = invoices_by_merchant_id.map { |merchant_id, invoices|
-      invoice_items = invoices.flat_map { |invoice| invoice_items_by_invoice_id.fetch(invoice.id, []) }
+      invoice_items_by_merchant_id = invoices_by_merchant_id
+                                         .map { |merchant_id, invoices|
+      invoice_items = invoices
+                          .flat_map { |invoice| invoice_items_by_invoice_id
+                          .fetch(invoice.id, []) }
        [merchant_id, invoice_items]
        }.to_h
 
@@ -107,31 +109,29 @@ class MerchantRepository
         end
         [merchant, revenue]
         }
-       merchants_by_revenue.sort_by { |merchant, revenue| revenue }.last(quantity)
-      .map { |merchant, revenue| merchant }
-      .reverse
-
-    #
-    # top_merchants = merchants.sort_by { |merchant| merchant.revenue }.reverse!
-    # top_merchants[0..(quantity - 1)]
+       merchants_by_revenue
+           .sort_by { |merchant, revenue| revenue }.last(quantity)
+           .map { |merchant, revenue| merchant }
+           .reverse
   end
 
-  # most items
   def most_items(quantity)
-    top_merchants = merchants.sort_by do |merchant|
+    top_merchants = merchants.sort_by { |merchant|
       invoices = merchant.invoices
       transactions = invoices.flat_map { |invoice| invoice.transactions }
-      good_invoices = transactions.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
-      invoice_items = good_invoices.compact.flat_map { |invoice| invoice.invoice_items.count }
+      good_invoices = transactions
+                          .flat_map { |transaction| transaction
+                          .invoice if transaction.result == "success" }
+      invoice_items = good_invoices
+                    .compact.flat_map { |invoice| invoice.invoice_items.count }
       invoice_items.reduce(:+)
-    end
-                        .reverse!
+    }.reverse!
     top_merchants[0..(quantity - 1)]
   end
 
-  # revenue by date
   def revenue(date)
-    merchant_revenue = merchants.compact.flat_map { |merchant| merchant.revenue(date) }
+    merchant_revenue = merchants
+                         .compact.flat_map { |merchant| merchant.revenue(date) }
     merchant_revenue.compact.reduce(:+)
   end
 

@@ -57,7 +57,7 @@ class InvoiceItemRepository
   end
 
   def find_all_by_unit_price(unit_price)
-    invoice_items.select { |invoice_item| invoice_item.unit_price == unit_price }
+    invoice_items.select { |invoice_item| invoice_item.unit_price == unit_price}
   end
 
   def find_all_by_item_id(item_id)
@@ -65,7 +65,7 @@ class InvoiceItemRepository
   end
 
   def find_all_by_invoice_id(invoice_id)
-    invoice_items.select { |invoice_item| invoice_item.invoice_id == invoice_id }
+    invoice_items.select { |invoice_item| invoice_item.invoice_id == invoice_id}
   end
 
   def find_all_by_quantity(quantity)
@@ -73,11 +73,11 @@ class InvoiceItemRepository
   end
 
   def find_all_by_created_at(created_at)
-    invoice_items.select { |invoice_item| invoice_item.created_at == created_at }
+    invoice_items.select { |invoice_item| invoice_item.created_at == created_at}
   end
 
   def find_all_by_updated_at(updated_at)
-    invoice_items.select { |invoice_item| invoice_item.updated_at == updated_at }
+    invoice_items.select { |invoice_item| invoice_item.updated_at == updated_at}
   end
 
 
@@ -96,10 +96,13 @@ class InvoiceItemRepository
   def create_invoice_items(invoice_id, quantities)
     quantities.each do |quantity|
       id = sales_engine.invoice_item_repository.all.last.id + 1
-      unit_price = sales_engine.item_repository.find_by_id(quantity[0]).unit_price.to_s
+      unit_price = sales_engine.item_repository.find_by_id(quantity[0])
+                       .unit_price.to_s
       created_at = Date.new
       updated_at = Date.new
-      new_invoice_item_data = {id: id, item_id: quantity[0], invoice_id: invoice_id, quantity: quantity[1], unit_price: unit_price}
+      new_invoice_item_data = {id: id, item_id: quantity[0],
+                               invoice_id: invoice_id, quantity: quantity[1],
+                               unit_price: unit_price}
       invoice_items << InvoiceItem.new(new_invoice_item_data, self)
     end
     invoice_items.last(quantities.size)

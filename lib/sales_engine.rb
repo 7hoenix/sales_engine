@@ -14,8 +14,9 @@ require_relative 'invoice'
 
 class SalesEngine
 
-  attr_accessor :invoice_item_repository, :merchant_repository, :customer_repository,
-                :item_repository, :data_directory, :invoice_repository, :transaction_repository
+  attr_accessor :invoice_item_repository, :merchant_repository,
+                :customer_repository, :item_repository, :data_directory,
+                :invoice_repository, :transaction_repository
 
   def initialize(data_directory="./data")
     @data_directory = data_directory
@@ -25,10 +26,12 @@ class SalesEngine
   def startup
     create_merchant_repository(get_data("#{data_directory}/merchants.csv"))
     create_customer_repository(get_data("#{data_directory}/customers.csv"))
-    create_invoice_item_repository(get_data("#{data_directory}/invoice_items.csv"))
+    create_invoice_item_repository(
+        get_data("#{data_directory}/invoice_items.csv"))
     create_invoice_repository(get_data("#{data_directory}/invoices.csv"))
     create_item_repository(get_data("#{data_directory}/items.csv"))
-    create_transaction_repository(get_data("#{data_directory}/transactions.csv"))
+    create_transaction_repository(
+        get_data("#{data_directory}/transactions.csv"))
   end
 
   def get_data(file_name)
@@ -44,7 +47,8 @@ class SalesEngine
   end
 
   def create_invoice_item_repository(invoice_item_data)
-    @invoice_item_repository ||= InvoiceItemRepository.new(invoice_item_data, self)
+    @invoice_item_repository ||= InvoiceItemRepository
+                                     .new(invoice_item_data, self)
   end
 
   def create_invoice_repository(invoice_data)
@@ -56,7 +60,8 @@ class SalesEngine
   end
 
   def create_transaction_repository(transaction_data)
-    @transaction_repository ||= TransactionRepository.new(transaction_data, self)
+    @transaction_repository ||= TransactionRepository
+                                    .new(transaction_data, self)
   end
 
 
@@ -137,11 +142,18 @@ class SalesEngine
     if date == nil
       transactions = invoices.flat_map { |invoice| invoice.transactions }
     else
-      transactions = invoices.flat_map { |invoice| invoice.transactions if invoice.created_at == date}
+      transactions = invoices
+                         .flat_map { |invoice| invoice
+                         .transactions if invoice.created_at == date}
     end
-    good_invoices = transactions.compact.flat_map {|transaction| transaction.invoice if transaction.result == "success"}
-    good_invoice_items = good_invoices.compact.flat_map { |invoice| invoice.invoice_items }
-    revenue = good_invoice_items.flat_map { |invoice_item| invoice_item.quantity * invoice_item.unit_price }
+    good_invoices = transactions
+                        .compact.flat_map {|transaction| transaction
+                        .invoice if transaction.result == "success"}
+    good_invoice_items = good_invoices
+                        .compact.flat_map { |invoice| invoice.invoice_items }
+    revenue = good_invoice_items
+                    .flat_map { |invoice_item| invoice_item
+                    .quantity * invoice_item.unit_price }
     revenue.reduce(:+)
   end
 
@@ -154,10 +166,14 @@ class SalesEngine
     merchant = get_merchant(merchant_id)
     invoices = merchant.invoices
     transactions = invoices.flat_map { |invoice| invoice.transactions }
-    good_invoices ||= transactions.flat_map { |transaction| transaction.invoice if transaction.result == "success" }
-    good_customers = good_invoices.compact.flat_map { |invoice| invoice.customer }
+    good_invoices = transactions
+                          .flat_map { |transaction| transaction
+                          .invoice if transaction.result == "success" }
+    good_customers = good_invoices
+                          .compact.flat_map { |invoice| invoice.customer }
     customers_grouped = good_customers.group_by { |customer| customer.id }
-    best_customer_list = customers_grouped.sort_by { |customer| customer[1].size }
+    best_customer_list = customers_grouped
+                           .sort_by { |customer| customer[1].size }
     customer_repository.find_by_id(best_customer_list.last[0])
   end
 
@@ -166,19 +182,10 @@ class SalesEngine
     merchant = get_merchant(merchant_id)
     invoices = merchant.invoices
     pending_invoices = invoices.select do |invoice|
-      successful = invoice.transactions.any? {|transaction| transaction.result == "success" }
+      successful = invoice
+             .transactions.any? {|transaction| transaction.result == "success" }
       invoice if !successful
     end
     pending_invoices.map { |invoice| invoice.customer }
-
-    # For each invoice, check if there's a successful transaction
-    # If so, ignore them
-    # If there are no successful transactions
-    # add invoice to collection
-    # find customer associated with that invoice and
-    # add it to a collection of pending customers
-
   end
-
-
 end
